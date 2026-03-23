@@ -386,390 +386,1176 @@
   <script>
     const APP_DATA = {
       lessons: [
-        {
-          id: "leccion-1",
-          title: "Lección 1",
-          description: "Unidad 1 · caracteres y vocabulario del diálogo",
-          items: [
-            {
-              id: "l1-001",
-              hanzi: "一",
-              pinyin: "yī",
-              meaning: "uno, un",
-              example_hanzi: "我是一个学生。",
-              example_pinyin: "Wǒ shì yí ge xuésheng.",
-              example_es: "Soy un estudiante."
-            },
-            {
-              id: "l1-002",
-              hanzi: "八",
-              pinyin: "bā",
-              meaning: "ocho",
-              example_hanzi: "八个人来了。",
-              example_pinyin: "Bā ge rén lái le.",
-              example_es: "Vinieron ocho personas."
-            },
-            {
-              id: "l1-003",
-              hanzi: "力",
-              pinyin: "lì",
-              meaning: "fuerza",
-              example_hanzi: "他很有力。",
-              example_pinyin: "Tā hěn yǒulì.",
-              example_es: "Él es fuerte."
-            },
-            {
-              id: "l1-004",
-              hanzi: "门",
-              pinyin: "mén",
-              meaning: "puerta",
-              example_hanzi: "门开了。",
-              example_pinyin: "Mén kāi le.",
-              example_es: "La puerta se abrió."
-            },
-            {
-              id: "l1-005",
-              hanzi: "也",
-              pinyin: "yě",
-              meaning: "también",
-              example_hanzi: "我也很好。",
-              example_pinyin: "Wǒ yě hěn hǎo.",
-              example_es: "Yo también estoy bien."
-            },
-            {
-              id: "l1-006",
-              hanzi: "马",
-              pinyin: "mǎ",
-              meaning: "caballo",
-              example_hanzi: "这是一匹马。",
-              example_pinyin: "Zhè shì yì pǐ mǎ.",
-              example_es: "Este es un caballo."
-            },
-            {
-              id: "l1-007",
-              hanzi: "女",
-              pinyin: "nǚ",
-              meaning: "mujer",
-              example_hanzi: "她是一个女人。",
-              example_pinyin: "Tā shì yí ge nǚrén.",
-              example_es: "Ella es una mujer."
-            },
-            {
-              id: "l1-008",
-              hanzi: "五",
-              pinyin: "wǔ",
-              meaning: "cinco",
-              example_hanzi: "我有五本书。",
-              example_pinyin: "Wǒ yǒu wǔ běn shū.",
-              example_es: "Tengo cinco libros."
-            },
-            {
-              id: "l1-009",
-              hanzi: "木",
-              pinyin: "mù",
-              meaning: "madera",
-              example_hanzi: "桌子是木的。",
-              example_pinyin: "Zhuōzi shì mù de.",
-              example_es: "La mesa es de madera."
-            },
-            {
-              id: "l1-010",
-              hanzi: "火",
-              pinyin: "huǒ",
-              meaning: "fuego",
-              example_hanzi: "火很大。",
-              example_pinyin: "Huǒ hěn dà.",
-              example_es: "El fuego es grande."
-            },
-            {
-              id: "l1-011",
-              hanzi: "你",
-              pinyin: "nǐ",
-              meaning: "tú",
-              example_hanzi: "你好。",
-              example_pinyin: "Nǐ hǎo.",
-              example_es: "Hola."
-            },
-            {
-              id: "l1-012",
-              hanzi: "好",
-              pinyin: "hǎo",
-              meaning: "bien, bueno",
-              example_hanzi: "我很好。",
-              example_pinyin: "Wǒ hěn hǎo.",
-              example_es: "Estoy muy bien."
-            },
-            {
-              id: "l1-013",
-              hanzi: "吗",
-              pinyin: "ma",
-              meaning: "partícula interrogativa",
-              example_hanzi: "你好吗？",
-              example_pinyin: "Nǐ hǎo ma?",
-              example_es: "¿Estás bien?"
-            },
-            {
-              id: "l1-014",
-              hanzi: "我",
-              pinyin: "wǒ",
-              meaning: "yo",
-              example_hanzi: "我是学生。",
-              example_pinyin: "Wǒ shì xuésheng.",
-              example_es: "Soy estudiante."
-            },
-            {
-              id: "l1-015",
-              hanzi: "很",
-              pinyin: "hěn",
-              meaning: "muy",
-              example_hanzi: "我很好。",
-              example_pinyin: "Wǒ hěn hǎo.",
-              example_es: "Estoy muy bien."
-            },
-            {
-              id: "l1-016",
-              hanzi: "呢",
-              pinyin: "ne",
-              meaning: "partícula final / y tú?",
-              example_hanzi: "你呢？",
-              example_pinyin: "Nǐ ne?",
-              example_es: "¿Y tú?"
-            }
-          ]
-        },
-        {
-          id: "leccion-2",
-          title: "Lección 2",
-          description: "Unidad 1 · familia, negación y café",
-          items: [
-            {
-              id: "l2-001",
-              hanzi: "口",
-              pinyin: "kǒu",
-              meaning: "boca",
-              example_hanzi: "口很小。",
-              example_pinyin: "Kǒu hěn xiǎo.",
-              example_es: "La boca es pequeña."
-            },
-            {
-              id: "l2-002",
-              hanzi: "土",
-              pinyin: "tǔ",
-              meaning: "tierra",
-              example_hanzi: "土是红色的。",
-              example_pinyin: "Tǔ shì hóngsè de.",
-              example_es: "La tierra es roja."
-            },
-            {
-              id: "l2-003",
-              hanzi: "六",
-              pinyin: "liù",
-              meaning: "seis",
-              example_hanzi: "我有六本书。",
-              example_pinyin: "Wǒ yǒu liù běn shū.",
-              example_es: "Tengo seis libros."
-            },
-            {
-              id: "l2-004",
-              hanzi: "不",
-              pinyin: "bù",
-              meaning: "no",
-              example_hanzi: "我不忙。",
-              example_pinyin: "Wǒ bù máng.",
-              example_es: "No estoy ocupado."
-            },
-            {
-              id: "l2-005",
-              hanzi: "尼",
-              pinyin: "ní",
-              meaning: "monja budista",
-              example_hanzi: "她是尼姑。",
-              example_pinyin: "Tā shì nígū.",
-              example_es: "Ella es una monja budista."
-            },
-            {
-              id: "l2-006",
-              hanzi: "可",
-              pinyin: "kě",
-              meaning: "poder, ser posible",
-              example_hanzi: "可以吗？",
-              example_pinyin: "Kěyǐ ma?",
-              example_es: "¿Se puede?"
-            },
-            {
-              id: "l2-007",
-              hanzi: "爸",
-              pinyin: "bà",
-              meaning: "papá",
-              example_hanzi: "你爸爸好吗？",
-              example_pinyin: "Nǐ bàba hǎo ma?",
-              example_es: "¿Tu papá está bien?"
-            },
-            {
-              id: "l2-008",
-              hanzi: "爸爸",
-              pinyin: "bàba",
-              meaning: "papá",
-              example_hanzi: "你爸爸好吗？",
-              example_pinyin: "Nǐ bàba hǎo ma?",
-              example_es: "¿Tu papá está bien?"
-            },
-            {
-              id: "l2-009",
-              hanzi: "妈",
-              pinyin: "mā",
-              meaning: "mamá",
-              example_hanzi: "你妈妈好吗？",
-              example_pinyin: "Nǐ māma hǎo ma?",
-              example_es: "¿Tu mamá está bien?"
-            },
-            {
-              id: "l2-010",
-              hanzi: "妈妈",
-              pinyin: "māma",
-              meaning: "mamá",
-              example_hanzi: "你妈妈好吗？",
-              example_pinyin: "Nǐ māma hǎo ma?",
-              example_es: "¿Tu mamá está bien?"
-            },
-            {
-              id: "l2-011",
-              hanzi: "他",
-              pinyin: "tā",
-              meaning: "él",
-              example_hanzi: "他很忙。",
-              example_pinyin: "Tā hěn máng.",
-              example_es: "Él está muy ocupado."
-            },
-            {
-              id: "l2-012",
-              hanzi: "他们",
-              pinyin: "tāmen",
-              meaning: "ellos",
-              example_hanzi: "他们都很好。",
-              example_pinyin: "Tāmen dōu hěn hǎo.",
-              example_es: "Ellos están todos bien."
-            },
-            {
-              id: "l2-013",
-              hanzi: "都",
-              pinyin: "dōu",
-              meaning: "todos, ambos",
-              example_hanzi: "他们都很好。",
-              example_pinyin: "Tāmen dōu hěn hǎo.",
-              example_es: "Ellos están todos bien."
-            },
-            {
-              id: "l2-014",
-              hanzi: "忙",
-              pinyin: "máng",
-              meaning: "ocupado",
-              example_hanzi: "他很忙。",
-              example_pinyin: "Tā hěn máng.",
-              example_es: "Él está muy ocupado."
-            },
-            {
-              id: "l2-015",
-              hanzi: "男朋友",
-              pinyin: "nán péngyou",
-              meaning: "novio",
-              example_hanzi: "你男朋友呢？",
-              example_pinyin: "Nǐ nán péngyou ne?",
-              example_es: "¿Y tu novio?"
-            },
-            {
-              id: "l2-016",
-              hanzi: "男",
-              pinyin: "nán",
-              meaning: "varón, masculino",
-              example_hanzi: "他是男的。",
-              example_pinyin: "Tā shì nán de.",
-              example_es: "Él es varón."
-            },
-            {
-              id: "l2-017",
-              hanzi: "朋友",
-              pinyin: "péngyou",
-              meaning: "amigo",
-              example_hanzi: "他是我的朋友。",
-              example_pinyin: "Tā shì wǒ de péngyou.",
-              example_es: "Él es mi amigo."
-            },
-            {
-              id: "l2-018",
-              hanzi: "哥",
-              pinyin: "gē",
-              meaning: "hermano mayor",
-              example_hanzi: "哥哥，你要咖啡吗？",
-              example_pinyin: "Gēge, nǐ yào kāfēi ma?",
-              example_es: "Hermano mayor, ¿querés café?"
-            },
-            {
-              id: "l2-019",
-              hanzi: "哥哥",
-              pinyin: "gēge",
-              meaning: "hermano mayor",
-              example_hanzi: "哥哥，你要咖啡吗？",
-              example_pinyin: "Gēge, nǐ yào kāfēi ma?",
-              example_es: "Hermano mayor, ¿querés café?"
-            },
-            {
-              id: "l2-020",
-              hanzi: "要",
-              pinyin: "yào",
-              meaning: "querer",
-              example_hanzi: "我要咖啡。",
-              example_pinyin: "Wǒ yào kāfēi.",
-              example_es: "Quiero café."
-            },
-            {
-              id: "l2-021",
-              hanzi: "咖啡",
-              pinyin: "kāfēi",
-              meaning: "café",
-              example_hanzi: "我也要咖啡。",
-              example_pinyin: "Wǒ yě yào kāfēi.",
-              example_es: "Yo también quiero café."
-            },
-            {
-              id: "l2-022",
-              hanzi: "我们",
-              pinyin: "wǒmen",
-              meaning: "nosotros",
-              example_hanzi: "我们都喝咖啡。",
-              example_pinyin: "Wǒmen dōu hē kāfēi.",
-              example_es: "Nosotros todos tomamos café."
-            },
-            {
-              id: "l2-023",
-              hanzi: "喝",
-              pinyin: "hē",
-              meaning: "beber, tomar",
-              example_hanzi: "我们都喝咖啡。",
-              example_pinyin: "Wǒmen dōu hē kāfēi.",
-              example_es: "Nosotros todos tomamos café."
-            },
-            {
-              id: "l2-024",
-              hanzi: "吗",
-              pinyin: "ma",
-              meaning: "partícula interrogativa",
-              example_hanzi: "你忙吗？",
-              example_pinyin: "Nǐ máng ma?",
-              example_es: "¿Estás ocupado?"
-            },
-            {
-              id: "l2-025",
-              hanzi: "呢",
-              pinyin: "ne",
-              meaning: "partícula final / y...?",
-              example_hanzi: "你男朋友呢？",
-              example_pinyin: "Nǐ nán péngyou ne?",
-              example_es: "¿Y tu novio?"
-            }
-          ]
-        }
-      ]
+  {
+    id: "leccion-1",
+    title: "Lección 1",
+    description: "Saludos básicos, pronombres y partículas iniciales",
+    items: [
+      {
+        id: "l1-001",
+        hanzi: "一",
+        pinyin: "yī",
+        meaning: "uno, un",
+        example_hanzi: "我是一个学生。",
+        example_pinyin: "Wǒ shì yí ge xuésheng.",
+        example_es: "Soy un estudiante."
+      },
+      {
+        id: "l1-002",
+        hanzi: "八",
+        pinyin: "bā",
+        meaning: "ocho",
+        example_hanzi: "八个人来了。",
+        example_pinyin: "Bā ge rén lái le.",
+        example_es: "Vinieron ocho personas."
+      },
+      {
+        id: "l1-003",
+        hanzi: "力",
+        pinyin: "lì",
+        meaning: "fuerza",
+        example_hanzi: "他很有力。",
+        example_pinyin: "Tā hěn yǒulì.",
+        example_es: "Él es fuerte."
+      },
+      {
+        id: "l1-004",
+        hanzi: "门",
+        pinyin: "mén",
+        meaning: "puerta",
+        example_hanzi: "门开了。",
+        example_pinyin: "Mén kāi le.",
+        example_es: "La puerta se abrió."
+      },
+      {
+        id: "l1-005",
+        hanzi: "也",
+        pinyin: "yě",
+        meaning: "también",
+        example_hanzi: "我也很好。",
+        example_pinyin: "Wǒ yě hěn hǎo.",
+        example_es: "Yo también estoy bien."
+      },
+      {
+        id: "l1-006",
+        hanzi: "马",
+        pinyin: "mǎ",
+        meaning: "caballo",
+        example_hanzi: "这是一匹马。",
+        example_pinyin: "Zhè shì yì pǐ mǎ.",
+        example_es: "Este es un caballo."
+      },
+      {
+        id: "l1-007",
+        hanzi: "女",
+        pinyin: "nǚ",
+        meaning: "mujer",
+        example_hanzi: "她是一个女人。",
+        example_pinyin: "Tā shì yí ge nǚrén.",
+        example_es: "Ella es una mujer."
+      },
+      {
+        id: "l1-008",
+        hanzi: "五",
+        pinyin: "wǔ",
+        meaning: "cinco",
+        example_hanzi: "我有五本书。",
+        example_pinyin: "Wǒ yǒu wǔ běn shū.",
+        example_es: "Tengo cinco libros."
+      },
+      {
+        id: "l1-009",
+        hanzi: "木",
+        pinyin: "mù",
+        meaning: "madera",
+        example_hanzi: "桌子是木的。",
+        example_pinyin: "Zhuōzi shì mù de.",
+        example_es: "La mesa es de madera."
+      },
+      {
+        id: "l1-010",
+        hanzi: "火",
+        pinyin: "huǒ",
+        meaning: "fuego",
+        example_hanzi: "火很大。",
+        example_pinyin: "Huǒ hěn dà.",
+        example_es: "El fuego es grande."
+      },
+      {
+        id: "l1-011",
+        hanzi: "你",
+        pinyin: "nǐ",
+        meaning: "tú",
+        example_hanzi: "你好。",
+        example_pinyin: "Nǐ hǎo.",
+        example_es: "Hola."
+      },
+      {
+        id: "l1-012",
+        hanzi: "好",
+        pinyin: "hǎo",
+        meaning: "bien, bueno",
+        example_hanzi: "我很好。",
+        example_pinyin: "Wǒ hěn hǎo.",
+        example_es: "Estoy muy bien."
+      },
+      {
+        id: "l1-013",
+        hanzi: "吗",
+        pinyin: "ma",
+        meaning: "partícula interrogativa",
+        example_hanzi: "你好吗？",
+        example_pinyin: "Nǐ hǎo ma?",
+        example_es: "¿Estás bien?"
+      },
+      {
+        id: "l1-014",
+        hanzi: "我",
+        pinyin: "wǒ",
+        meaning: "yo",
+        example_hanzi: "我是学生。",
+        example_pinyin: "Wǒ shì xuésheng.",
+        example_es: "Soy estudiante."
+      },
+      {
+        id: "l1-015",
+        hanzi: "很",
+        pinyin: "hěn",
+        meaning: "muy",
+        example_hanzi: "我很好。",
+        example_pinyin: "Wǒ hěn hǎo.",
+        example_es: "Estoy muy bien."
+      },
+      {
+        id: "l1-016",
+        hanzi: "呢",
+        pinyin: "ne",
+        meaning: "partícula final / y tú?",
+        example_hanzi: "你呢？",
+        example_pinyin: "Nǐ ne?",
+        example_es: "¿Y tú?"
+      }
+    ]
+  },
+  {
+    id: "leccion-2",
+    title: "Lección 2",
+    description: "Familia, estados personales y preferencias",
+    items: [
+      {
+        id: "l2-001",
+        hanzi: "口",
+        pinyin: "kǒu",
+        meaning: "boca",
+        example_hanzi: "口很小。",
+        example_pinyin: "Kǒu hěn xiǎo.",
+        example_es: "La boca es pequeña."
+      },
+      {
+        id: "l2-002",
+        hanzi: "土",
+        pinyin: "tǔ",
+        meaning: "tierra",
+        example_hanzi: "土是红色的。",
+        example_pinyin: "Tǔ shì hóngsè de.",
+        example_es: "La tierra es roja."
+      },
+      {
+        id: "l2-003",
+        hanzi: "六",
+        pinyin: "liù",
+        meaning: "seis",
+        example_hanzi: "我有六本书。",
+        example_pinyin: "Wǒ yǒu liù běn shū.",
+        example_es: "Tengo seis libros."
+      },
+      {
+        id: "l2-004",
+        hanzi: "不",
+        pinyin: "bù",
+        meaning: "no",
+        example_hanzi: "我不忙。",
+        example_pinyin: "Wǒ bù máng.",
+        example_es: "No estoy ocupado."
+      },
+      {
+        id: "l2-005",
+        hanzi: "尼",
+        pinyin: "ní",
+        meaning: "monja budista",
+        example_hanzi: "她是尼姑。",
+        example_pinyin: "Tā shì nígū.",
+        example_es: "Ella es una monja budista."
+      },
+      {
+        id: "l2-006",
+        hanzi: "可",
+        pinyin: "kě",
+        meaning: "poder, ser posible",
+        example_hanzi: "可以吗？",
+        example_pinyin: "Kěyǐ ma?",
+        example_es: "¿Se puede?"
+      },
+      {
+        id: "l2-007",
+        hanzi: "爸",
+        pinyin: "bà",
+        meaning: "papá",
+        example_hanzi: "你爸爸好吗？",
+        example_pinyin: "Nǐ bàba hǎo ma?",
+        example_es: "¿Tu papá está bien?"
+      },
+      {
+        id: "l2-008",
+        hanzi: "爸爸",
+        pinyin: "bàba",
+        meaning: "papá",
+        example_hanzi: "你爸爸好吗？",
+        example_pinyin: "Nǐ bàba hǎo ma?",
+        example_es: "¿Tu papá está bien?"
+      },
+      {
+        id: "l2-009",
+        hanzi: "妈",
+        pinyin: "mā",
+        meaning: "mamá",
+        example_hanzi: "你妈妈好吗？",
+        example_pinyin: "Nǐ māma hǎo ma?",
+        example_es: "¿Tu mamá está bien?"
+      },
+      {
+        id: "l2-010",
+        hanzi: "妈妈",
+        pinyin: "māma",
+        meaning: "mamá",
+        example_hanzi: "你妈妈好吗？",
+        example_pinyin: "Nǐ māma hǎo ma?",
+        example_es: "¿Tu mamá está bien?"
+      },
+      {
+        id: "l2-011",
+        hanzi: "他",
+        pinyin: "tā",
+        meaning: "él",
+        example_hanzi: "他很忙。",
+        example_pinyin: "Tā hěn máng.",
+        example_es: "Él está muy ocupado."
+      },
+      {
+        id: "l2-012",
+        hanzi: "他们",
+        pinyin: "tāmen",
+        meaning: "ellos",
+        example_hanzi: "他们都很好。",
+        example_pinyin: "Tāmen dōu hěn hǎo.",
+        example_es: "Ellos están todos bien."
+      },
+      {
+        id: "l2-013",
+        hanzi: "都",
+        pinyin: "dōu",
+        meaning: "todos, ambos",
+        example_hanzi: "他们都很好。",
+        example_pinyin: "Tāmen dōu hěn hǎo.",
+        example_es: "Ellos están todos bien."
+      },
+      {
+        id: "l2-014",
+        hanzi: "忙",
+        pinyin: "máng",
+        meaning: "ocupado",
+        example_hanzi: "他很忙。",
+        example_pinyin: "Tā hěn máng.",
+        example_es: "Él está muy ocupado."
+      },
+      {
+        id: "l2-015",
+        hanzi: "男朋友",
+        pinyin: "nán péngyou",
+        meaning: "novio",
+        example_hanzi: "你男朋友呢？",
+        example_pinyin: "Nǐ nán péngyou ne?",
+        example_es: "¿Y tu novio?"
+      },
+      {
+        id: "l2-016",
+        hanzi: "男",
+        pinyin: "nán",
+        meaning: "varón, masculino",
+        example_hanzi: "他是男的。",
+        example_pinyin: "Tā shì nán de.",
+        example_es: "Él es varón."
+      },
+      {
+        id: "l2-017",
+        hanzi: "朋友",
+        pinyin: "péngyou",
+        meaning: "amigo",
+        example_hanzi: "他是我的朋友。",
+        example_pinyin: "Tā shì wǒ de péngyou.",
+        example_es: "Él es mi amigo."
+      },
+      {
+        id: "l2-018",
+        hanzi: "哥",
+        pinyin: "gē",
+        meaning: "hermano mayor",
+        example_hanzi: "哥哥，你要咖啡吗？",
+        example_pinyin: "Gēge, nǐ yào kāfēi ma?",
+        example_es: "Hermano mayor, ¿querés café?"
+      },
+      {
+        id: "l2-019",
+        hanzi: "哥哥",
+        pinyin: "gēge",
+        meaning: "hermano mayor",
+        example_hanzi: "哥哥，你要咖啡吗？",
+        example_pinyin: "Gēge, nǐ yào kāfēi ma?",
+        example_es: "Hermano mayor, ¿querés café?"
+      },
+      {
+        id: "l2-020",
+        hanzi: "要",
+        pinyin: "yào",
+        meaning: "querer",
+        example_hanzi: "我要咖啡。",
+        example_pinyin: "Wǒ yào kāfēi.",
+        example_es: "Quiero café."
+      },
+      {
+        id: "l2-021",
+        hanzi: "咖啡",
+        pinyin: "kāfēi",
+        meaning: "café",
+        example_hanzi: "我也要咖啡。",
+        example_pinyin: "Wǒ yě yào kāfēi.",
+        example_es: "Yo también quiero café."
+      },
+      {
+        id: "l2-022",
+        hanzi: "我们",
+        pinyin: "wǒmen",
+        meaning: "nosotros",
+        example_hanzi: "我们都喝咖啡。",
+        example_pinyin: "Wǒmen dōu hē kāfēi.",
+        example_es: "Nosotros todos tomamos café."
+      },
+      {
+        id: "l2-023",
+        hanzi: "喝",
+        pinyin: "hē",
+        meaning: "beber, tomar",
+        example_hanzi: "我们都喝咖啡。",
+        example_pinyin: "Wǒmen dōu hē kāfēi.",
+        example_es: "Nosotros todos tomamos café."
+      }
+    ]
+  },
+  {
+    id: "leccion-3",
+    title: "Lección 3",
+    description: "Identidad, países y profesiones",
+    items: [
+      {
+        id: "l3-001",
+        hanzi: "人",
+        pinyin: "rén",
+        meaning: "persona, gente",
+        example_hanzi: "她是中国人。",
+        example_pinyin: "Tā shì Zhōngguó rén.",
+        example_es: "Ella es china."
+      },
+      {
+        id: "l3-002",
+        hanzi: "十",
+        pinyin: "shí",
+        meaning: "diez",
+        example_hanzi: "我有十本书。",
+        example_pinyin: "Wǒ yǒu shí běn shū.",
+        example_es: "Tengo diez libros."
+      },
+      {
+        id: "l3-003",
+        hanzi: "比",
+        pinyin: "bǐ",
+        meaning: "comparar; daga (sentido original del carácter)",
+        example_hanzi: "这个比那个大。",
+        example_pinyin: "Zhège bǐ nàge dà.",
+        example_es: "Este es más grande que aquel."
+      },
+      {
+        id: "l3-004",
+        hanzi: "中",
+        pinyin: "zhōng",
+        meaning: "medio, centro",
+        example_hanzi: "中国很大。",
+        example_pinyin: "Zhōngguó hěn dà.",
+        example_es: "China es muy grande."
+      },
+      {
+        id: "l3-005",
+        hanzi: "日",
+        pinyin: "rì",
+        meaning: "sol, día",
+        example_hanzi: "今日很好。",
+        example_pinyin: "Jīnrì hěn hǎo.",
+        example_es: "Hoy está muy bien."
+      },
+      {
+        id: "l3-006",
+        hanzi: "贝",
+        pinyin: "bèi",
+        meaning: "concha",
+        example_hanzi: "贝壳很好看。",
+        example_pinyin: "Bèiké hěn hǎokàn.",
+        example_es: "La concha es muy linda."
+      },
+      {
+        id: "l3-007",
+        hanzi: "玉",
+        pinyin: "yù",
+        meaning: "jade",
+        example_hanzi: "这是玉吗？",
+        example_pinyin: "Zhè shì yù ma?",
+        example_es: "¿Esto es jade?"
+      },
+      {
+        id: "l3-008",
+        hanzi: "矢",
+        pinyin: "shǐ",
+        meaning: "flecha",
+        example_hanzi: "矢很长。",
+        example_pinyin: "Shǐ hěn cháng.",
+        example_es: "La flecha es larga."
+      },
+      {
+        id: "l3-009",
+        hanzi: "生",
+        pinyin: "shēng",
+        meaning: "nacer; sufijo que denota persona",
+        example_hanzi: "我是医生。",
+        example_pinyin: "Wǒ shì yīshēng.",
+        example_es: "Soy médico."
+      },
+      {
+        id: "l3-010",
+        hanzi: "者",
+        pinyin: "zhě",
+        meaning: "persona; cosa",
+        example_hanzi: "他是记者。",
+        example_pinyin: "Tā shì jìzhě.",
+        example_es: "Él es periodista."
+      },
+      {
+        id: "l3-011",
+        hanzi: "是",
+        pinyin: "shì",
+        meaning: "ser",
+        example_hanzi: "她是老师。",
+        example_pinyin: "Tā shì lǎoshī.",
+        example_es: "Ella es profesora."
+      },
+      {
+        id: "l3-012",
+        hanzi: "那",
+        pinyin: "nà",
+        meaning: "ese, aquella",
+        example_hanzi: "那是我们老师。",
+        example_pinyin: "Nà shì wǒmen lǎoshī.",
+        example_es: "Ese es nuestro profesor."
+      },
+      {
+        id: "l3-013",
+        hanzi: "谁",
+        pinyin: "shéi",
+        meaning: "quién",
+        example_hanzi: "那是谁？",
+        example_pinyin: "Nà shì shéi?",
+        example_es: "¿Quién es ese?"
+      },
+      {
+        id: "l3-014",
+        hanzi: "老师",
+        pinyin: "lǎoshī",
+        meaning: "profesor, docente",
+        example_hanzi: "她是老师吗？",
+        example_pinyin: "Tā shì lǎoshī ma?",
+        example_es: "¿Ella es profesora?"
+      },
+      {
+        id: "l3-015",
+        hanzi: "老",
+        pinyin: "lǎo",
+        meaning: "viejo; prefijo respetuoso/familiar",
+        example_hanzi: "老师，您好！",
+        example_pinyin: "Lǎoshī, nín hǎo!",
+        example_es: "¡Hola, profesor!"
+      },
+      {
+        id: "l3-016",
+        hanzi: "师",
+        pinyin: "shī",
+        meaning: "maestro, instructor",
+        example_hanzi: "他不是老师。",
+        example_pinyin: "Tā bú shì lǎoshī.",
+        example_es: "Él no es profesor."
+      },
+      {
+        id: "l3-017",
+        hanzi: "哪",
+        pinyin: "nǎ",
+        meaning: "qué, cuál",
+        example_hanzi: "她是哪国人？",
+        example_pinyin: "Tā shì nǎ guó rén?",
+        example_es: "¿De qué país es ella?"
+      },
+      {
+        id: "l3-018",
+        hanzi: "国",
+        pinyin: "guó",
+        meaning: "país",
+        example_hanzi: "中国是一个大国。",
+        example_pinyin: "Zhōngguó shì yí ge dà guó.",
+        example_es: "China es un gran país."
+      },
+      {
+        id: "l3-019",
+        hanzi: "中国",
+        pinyin: "Zhōngguó",
+        meaning: "China",
+        example_hanzi: "她是中国人。",
+        example_pinyin: "Tā shì Zhōngguó rén.",
+        example_es: "Ella es china."
+      },
+      {
+        id: "l3-020",
+        hanzi: "中国人",
+        pinyin: "Zhōngguó rén",
+        meaning: "persona china, chino/a",
+        example_hanzi: "我们老师都是中国人。",
+        example_pinyin: "Wǒmen lǎoshī dōu shì Zhōngguó rén.",
+        example_es: "Nuestros profesores son todos chinos."
+      },
+      {
+        id: "l3-021",
+        hanzi: "您",
+        pinyin: "nín",
+        meaning: "usted (forma respetuosa)",
+        example_hanzi: "老师，您好！",
+        example_pinyin: "Lǎoshī, nín hǎo!",
+        example_es: "¡Hola, profesor!"
+      },
+      {
+        id: "l3-022",
+        hanzi: "这",
+        pinyin: "zhè",
+        meaning: "este, esta",
+        example_hanzi: "这是我朋友。",
+        example_pinyin: "Zhè shì wǒ péngyou.",
+        example_es: "Este es mi amigo."
+      },
+      {
+        id: "l3-023",
+        hanzi: "外语",
+        pinyin: "wàiyǔ",
+        meaning: "lengua extranjera",
+        example_hanzi: "他是外语老师。",
+        example_pinyin: "Tā shì wàiyǔ lǎoshī.",
+        example_es: "Él es profesor de lengua extranjera."
+      },
+      {
+        id: "l3-024",
+        hanzi: "外",
+        pinyin: "wài",
+        meaning: "afuera, exterior",
+        example_hanzi: "她是我外婆。",
+        example_pinyin: "Tā shì wǒ wàipó.",
+        example_es: "Ella es mi abuela materna."
+      },
+      {
+        id: "l3-025",
+        hanzi: "语",
+        pinyin: "yǔ",
+        meaning: "lengua, idioma",
+        example_hanzi: "汉语很有意思。",
+        example_pinyin: "Hànyǔ hěn yǒu yìsi.",
+        example_es: "El chino es muy interesante."
+      },
+      {
+        id: "l3-026",
+        hanzi: "医生",
+        pinyin: "yīshēng",
+        meaning: "médico",
+        example_hanzi: "我不是老师，我是医生。",
+        example_pinyin: "Wǒ bú shì lǎoshī, wǒ shì yīshēng.",
+        example_es: "No soy profesor, soy médico."
+      },
+      {
+        id: "l3-027",
+        hanzi: "医",
+        pinyin: "yī",
+        meaning: "medicina, médico",
+        example_hanzi: "他学医。",
+        example_pinyin: "Tā xué yī.",
+        example_es: "Él estudia medicina."
+      },
+      {
+        id: "l3-028",
+        hanzi: "奶奶",
+        pinyin: "nǎinai",
+        meaning: "abuela paterna",
+        example_hanzi: "这是你奶奶吗？",
+        example_pinyin: "Zhè shì nǐ nǎinai ma?",
+        example_es: "¿Esta es tu abuela paterna?"
+      },
+      {
+        id: "l3-029",
+        hanzi: "外婆",
+        pinyin: "wàipó",
+        meaning: "abuela materna",
+        example_hanzi: "不是，她是我外婆。",
+        example_pinyin: "Bú shì, tā shì wǒ wàipó.",
+        example_es: "No, ella es mi abuela materna."
+      }
+    ]
+  },
+  {
+    id: "leccion-4",
+    title: "Lección 4",
+    description: "Presentaciones formales, apellidos y nacionalidades",
+    items: [
+      {
+        id: "l4-001",
+        hanzi: "七",
+        pinyin: "qī",
+        meaning: "siete",
+        example_hanzi: "我有七本书。",
+        example_pinyin: "Wǒ yǒu qī běn shū.",
+        example_es: "Tengo siete libros."
+      },
+      {
+        id: "l4-002",
+        hanzi: "小",
+        pinyin: "xiǎo",
+        meaning: "pequeño",
+        example_hanzi: "这个很小。",
+        example_pinyin: "Zhège hěn xiǎo.",
+        example_es: "Esto es muy pequeño."
+      },
+      {
+        id: "l4-003",
+        hanzi: "心",
+        pinyin: "xīn",
+        meaning: "corazón",
+        example_hanzi: "我很高兴。",
+        example_pinyin: "Wǒ hěn gāoxìng.",
+        example_es: "Estoy muy contento."
+      },
+      {
+        id: "l4-004",
+        hanzi: "水",
+        pinyin: "shuǐ",
+        meaning: "agua",
+        example_hanzi: "我要水。",
+        example_pinyin: "Wǒ yào shuǐ.",
+        example_es: "Quiero agua."
+      },
+      {
+        id: "l4-005",
+        hanzi: "月",
+        pinyin: "yuè",
+        meaning: "luna, mes",
+        example_hanzi: "这个月很好。",
+        example_pinyin: "Zhège yuè hěn hǎo.",
+        example_es: "Este mes está bien."
+      },
+      {
+        id: "l4-006",
+        hanzi: "手",
+        pinyin: "shǒu",
+        meaning: "mano",
+        example_hanzi: "这是手。",
+        example_pinyin: "Zhè shì shǒu.",
+        example_es: "Esta es una mano."
+      },
+      {
+        id: "l4-007",
+        hanzi: "田",
+        pinyin: "tián",
+        meaning: "campo",
+        example_hanzi: "田很大。",
+        example_pinyin: "Tián hěn dà.",
+        example_es: "El campo es grande."
+      },
+      {
+        id: "l4-008",
+        hanzi: "白",
+        pinyin: "bái",
+        meaning: "blanco",
+        example_hanzi: "这是白的。",
+        example_pinyin: "Zhè shì bái de.",
+        example_es: "Esto es blanco."
+      },
+      {
+        id: "l4-009",
+        hanzi: "只",
+        pinyin: "zhǐ",
+        meaning: "solamente",
+        example_hanzi: "我只喝水。",
+        example_pinyin: "Wǒ zhǐ hē shuǐ.",
+        example_es: "Yo solo tomo agua."
+      },
+      {
+        id: "l4-010",
+        hanzi: "言",
+        pinyin: "yán",
+        meaning: "palabra, habla",
+        example_hanzi: "语言很有意思。",
+        example_pinyin: "Yǔyán hěn yǒu yìsi.",
+        example_es: "El lenguaje es muy interesante."
+      },
+      {
+        id: "l4-011",
+        hanzi: "可以",
+        pinyin: "kěyǐ",
+        meaning: "poder, estar permitido",
+        example_hanzi: "可以进来吗？",
+        example_pinyin: "Kěyǐ jìnlái ma?",
+        example_es: "¿Se puede pasar?"
+      },
+      {
+        id: "l4-012",
+        hanzi: "进来",
+        pinyin: "jìnlái",
+        meaning: "entrar, pasar hacia adentro",
+        example_hanzi: "请进！",
+        example_pinyin: "Qǐng jìn!",
+        example_es: "¡Pase, por favor!"
+      },
+      {
+        id: "l4-013",
+        hanzi: "请",
+        pinyin: "qǐng",
+        meaning: "por favor; invitar, pedir",
+        example_hanzi: "请问，您贵姓？",
+        example_pinyin: "Qǐngwèn, nín guìxìng?",
+        example_es: "Disculpe, ¿cuál es su apellido?"
+      },
+      {
+        id: "l4-014",
+        hanzi: "记者",
+        pinyin: "jìzhě",
+        meaning: "periodista",
+        example_hanzi: "他是记者。",
+        example_pinyin: "Tā shì jìzhě.",
+        example_es: "Él es periodista."
+      },
+      {
+        id: "l4-015",
+        hanzi: "请问",
+        pinyin: "qǐngwèn",
+        meaning: "disculpe, permítame preguntar",
+        example_hanzi: "请问，您贵姓？",
+        example_pinyin: "Qǐngwèn, nín guìxìng?",
+        example_es: "Disculpe, ¿cuál es su apellido?"
+      },
+      {
+        id: "l4-016",
+        hanzi: "贵姓",
+        pinyin: "guìxìng",
+        meaning: "su honorable apellido; fórmula cortés para preguntar el apellido",
+        example_hanzi: "您贵姓？",
+        example_pinyin: "Nín guìxìng?",
+        example_es: "¿Cuál es su apellido?"
+      },
+      {
+        id: "l4-017",
+        hanzi: "姓",
+        pinyin: "xìng",
+        meaning: "apellido; apellidarse",
+        example_hanzi: "我姓林。",
+        example_pinyin: "Wǒ xìng Lín.",
+        example_es: "Mi apellido es Lin."
+      },
+      {
+        id: "l4-018",
+        hanzi: "叫",
+        pinyin: "jiào",
+        meaning: "llamarse",
+        example_hanzi: "我叫马大为。",
+        example_pinyin: "Wǒ jiào Mǎ Dàwéi.",
+        example_es: "Me llamo Ma Dawei."
+      },
+      {
+        id: "l4-019",
+        hanzi: "认识",
+        pinyin: "rènshi",
+        meaning: "conocer",
+        example_hanzi: "认识你很高兴。",
+        example_pinyin: "Rènshi nǐ hěn gāoxìng.",
+        example_es: "Conocerte me da mucho gusto."
+      },
+      {
+        id: "l4-020",
+        hanzi: "高兴",
+        pinyin: "gāoxìng",
+        meaning: "contento, alegre",
+        example_hanzi: "认识您，我也很高兴。",
+        example_pinyin: "Rènshi nín, wǒ yě hěn gāoxìng.",
+        example_es: "Conocerlo a usted también me pone muy contento."
+      },
+      {
+        id: "l4-021",
+        hanzi: "先生",
+        pinyin: "xiānsheng",
+        meaning: "señor",
+        example_hanzi: "陆先生，您好。",
+        example_pinyin: "Lù xiānsheng, nín hǎo.",
+        example_es: "Señor Lu, hola."
+      },
+      {
+        id: "l4-022",
+        hanzi: "语言",
+        pinyin: "yǔyán",
+        meaning: "lengua, idioma, lenguaje",
+        example_hanzi: "我是语言学院的学生。",
+        example_pinyin: "Wǒ shì Yǔyán Xuéyuàn de xuésheng.",
+        example_es: "Soy estudiante del Instituto de Lenguas."
+      },
+      {
+        id: "l4-023",
+        hanzi: "学院",
+        pinyin: "xuéyuàn",
+        meaning: "instituto, facultad, colegio",
+        example_hanzi: "我是语言学院的学生。",
+        example_pinyin: "Wǒ shì Yǔyán Xuéyuàn de xuésheng.",
+        example_es: "Soy estudiante del Instituto de Lenguas."
+      },
+      {
+        id: "l4-024",
+        hanzi: "的",
+        pinyin: "de",
+        meaning: "partícula posesiva o atributiva",
+        example_hanzi: "我是语言学院的学生。",
+        example_pinyin: "Wǒ shì Yǔyán Xuéyuàn de xuésheng.",
+        example_es: "Soy estudiante del Instituto de Lenguas."
+      },
+      {
+        id: "l4-025",
+        hanzi: "英国",
+        pinyin: "Yīngguó",
+        meaning: "Reino Unido",
+        example_hanzi: "我是英国人。",
+        example_pinyin: "Wǒ shì Yīngguó rén.",
+        example_es: "Soy británica."
+      },
+      {
+        id: "l4-026",
+        hanzi: "英国人",
+        pinyin: "Yīngguó rén",
+        meaning: "británico/a",
+        example_hanzi: "我是英国人。",
+        example_pinyin: "Wǒ shì Yīngguó rén.",
+        example_es: "Soy británica."
+      },
+      {
+        id: "l4-027",
+        hanzi: "什么",
+        pinyin: "shénme",
+        meaning: "qué",
+        example_hanzi: "你姓什么？",
+        example_pinyin: "Nǐ xìng shénme?",
+        example_es: "¿Cuál es tu apellido?"
+      },
+      {
+        id: "l4-028",
+        hanzi: "加拿大",
+        pinyin: "Jiānádà",
+        meaning: "Canadá",
+        example_hanzi: "你是加拿大人吗？",
+        example_pinyin: "Nǐ shì Jiānádà rén ma?",
+        example_es: "¿Sos canadiense?"
+      },
+      {
+        id: "l4-029",
+        hanzi: "美国",
+        pinyin: "Měiguó",
+        meaning: "Estados Unidos",
+        example_hanzi: "我是美国人。",
+        example_pinyin: "Wǒ shì Měiguó rén.",
+        example_es: "Soy estadounidense."
+      },
+      {
+        id: "l4-030",
+        hanzi: "美国人",
+        pinyin: "Měiguó rén",
+        meaning: "estadounidense",
+        example_hanzi: "我是美国人。",
+        example_pinyin: "Wǒ shì Měiguó rén.",
+        example_es: "Soy estadounidense."
+      },
+      {
+        id: "l4-031",
+        hanzi: "学习",
+        pinyin: "xuéxí",
+        meaning: "estudiar, aprender",
+        example_hanzi: "我学习汉语。",
+        example_pinyin: "Wǒ xuéxí Hànyǔ.",
+        example_es: "Estudio chino."
+      },
+      {
+        id: "l4-032",
+        hanzi: "汉语",
+        pinyin: "Hànyǔ",
+        meaning: "idioma chino",
+        example_hanzi: "我学习汉语。",
+        example_pinyin: "Wǒ xuéxí Hànyǔ.",
+        example_es: "Estudio chino."
+      }
+    ]
+  },
+  {
+    id: "leccion-5",
+    title: "Lección 5",
+    description: "Ubicación, búsqueda de personas y despedidas",
+    items: [
+      {
+        id: "l5-001",
+        hanzi: "二",
+        pinyin: "èr",
+        meaning: "dos",
+        example_hanzi: "餐厅在二层。",
+        example_pinyin: "Cāntīng zài èr céng.",
+        example_es: "El comedor está en el segundo piso."
+      },
+      {
+        id: "l5-002",
+        hanzi: "儿",
+        pinyin: "ér",
+        meaning: "hijo; sufijo en algunas palabras",
+        example_hanzi: "我们在这儿。",
+        example_pinyin: "Wǒmen zài zhèr.",
+        example_es: "Estamos acá."
+      },
+      {
+        id: "l5-003",
+        hanzi: "子",
+        pinyin: "zǐ",
+        meaning: "hijo",
+        example_hanzi: "桌子在这儿。",
+        example_pinyin: "Zhuōzi zài zhèr.",
+        example_es: "La mesa está acá."
+      },
+      {
+        id: "l5-004",
+        hanzi: "井",
+        pinyin: "jǐng",
+        meaning: "pozo",
+        example_hanzi: "井很深。",
+        example_pinyin: "Jǐng hěn shēn.",
+        example_es: "El pozo es profundo."
+      },
+      {
+        id: "l5-005",
+        hanzi: "文",
+        pinyin: "wén",
+        meaning: "lengua escrita, texto",
+        example_hanzi: "中文很有意思。",
+        example_pinyin: "Zhōngwén hěn yǒu yìsi.",
+        example_es: "El chino escrito es muy interesante."
+      },
+      {
+        id: "l5-006",
+        hanzi: "见",
+        pinyin: "jiàn",
+        meaning: "ver",
+        example_hanzi: "再见！",
+        example_pinyin: "Zàijiàn!",
+        example_es: "¡Adiós!"
+      },
+      {
+        id: "l5-007",
+        hanzi: "且",
+        pinyin: "qiě",
+        meaning: "y; además",
+        example_hanzi: "而且我也很高兴。",
+        example_pinyin: "Érqiě wǒ yě hěn gāoxìng.",
+        example_es: "Y además yo también estoy muy contento."
+      },
+      {
+        id: "l5-008",
+        hanzi: "四",
+        pinyin: "sì",
+        meaning: "cuatro",
+        example_hanzi: "她在二零四号。",
+        example_pinyin: "Tā zài èr líng sì hào.",
+        example_es: "Ella está en el 204."
+      },
+      {
+        id: "l5-009",
+        hanzi: "青",
+        pinyin: "qīng",
+        meaning: "verde-azul",
+        example_hanzi: "青山很美。",
+        example_pinyin: "Qīngshān hěn měi.",
+        example_es: "La montaña verde-azulada es muy linda."
+      },
+      {
+        id: "l5-010",
+        hanzi: "宿舍",
+        pinyin: "sùshè",
+        meaning: "dormitorio, residencia",
+        example_hanzi: "这是宿舍吗？",
+        example_pinyin: "Zhè shì sùshè ma?",
+        example_es: "¿Esta es la residencia?"
+      },
+      {
+        id: "l5-011",
+        hanzi: "坐",
+        pinyin: "zuò",
+        meaning: "sentarse",
+        example_hanzi: "请坐。",
+        example_pinyin: "Qǐng zuò.",
+        example_es: "Siéntese, por favor."
+      },
+      {
+        id: "l5-012",
+        hanzi: "在",
+        pinyin: "zài",
+        meaning: "estar en, encontrarse en",
+        example_hanzi: "她不在。",
+        example_pinyin: "Tā bú zài.",
+        example_es: "Ella no está."
+      },
+      {
+        id: "l5-013",
+        hanzi: "哪儿",
+        pinyin: "nǎr",
+        meaning: "dónde",
+        example_hanzi: "她在哪儿？",
+        example_pinyin: "Tā zài nǎr?",
+        example_es: "¿Dónde está ella?"
+      },
+      {
+        id: "l5-014",
+        hanzi: "对不起",
+        pinyin: "duìbuqǐ",
+        meaning: "perdón, disculpe",
+        example_hanzi: "对不起，我不知道。",
+        example_pinyin: "Duìbuqǐ, wǒ bù zhīdào.",
+        example_es: "Perdón, no sé."
+      },
+      {
+        id: "l5-015",
+        hanzi: "知道",
+        pinyin: "zhīdào",
+        meaning: "saber, conocer",
+        example_hanzi: "我不知道。",
+        example_pinyin: "Wǒ bù zhīdào.",
+        example_es: "No sé."
+      },
+      {
+        id: "l5-016",
+        hanzi: "没关系",
+        pinyin: "méi guānxi",
+        meaning: "no importa, está bien",
+        example_hanzi: "没关系。",
+        example_pinyin: "Méi guānxi.",
+        example_es: "No importa."
+      },
+      {
+        id: "l5-017",
+        hanzi: "再见",
+        pinyin: "zàijiàn",
+        meaning: "adiós, hasta luego",
+        example_hanzi: "好，再见。",
+        example_pinyin: "Hǎo, zàijiàn.",
+        example_es: "Bueno, adiós."
+      },
+      {
+        id: "l5-018",
+        hanzi: "小姐",
+        pinyin: "xiǎojiě",
+        meaning: "señorita",
+        example_hanzi: "小姐，请问餐厅在哪儿？",
+        example_pinyin: "Xiǎojiě, qǐngwèn cāntīng zài nǎr?",
+        example_es: "Señorita, disculpe, ¿dónde está el comedor?"
+      },
+      {
+        id: "l5-019",
+        hanzi: "餐厅",
+        pinyin: "cāntīng",
+        meaning: "comedor, restaurante",
+        example_hanzi: "餐厅在二层。",
+        example_pinyin: "Cāntīng zài èr céng.",
+        example_es: "El comedor está en el segundo piso."
+      },
+      {
+        id: "l5-020",
+        hanzi: "层",
+        pinyin: "céng",
+        meaning: "piso, planta",
+        example_hanzi: "在二层二零四号。",
+        example_pinyin: "Zài èr céng èr líng sì hào.",
+        example_es: "Está en el segundo piso, habitación 204."
+      },
+      {
+        id: "l5-021",
+        hanzi: "号",
+        pinyin: "hào",
+        meaning: "número",
+        example_hanzi: "她在二零四号。",
+        example_pinyin: "Tā zài èr líng sì hào.",
+        example_es: "Ella está en el 204."
+      },
+      {
+        id: "l5-022",
+        hanzi: "谢谢",
+        pinyin: "xièxie",
+        meaning: "gracias",
+        example_hanzi: "谢谢。",
+        example_pinyin: "Xièxie.",
+        example_es: "Gracias."
+      },
+      {
+        id: "l5-023",
+        hanzi: "不用谢",
+        pinyin: "búyòng xiè",
+        meaning: "de nada",
+        example_hanzi: "不用谢。",
+        example_pinyin: "Búyòng xiè.",
+        example_es: "De nada."
+      },
+      {
+        id: "l5-024",
+        hanzi: "来",
+        pinyin: "lái",
+        meaning: "venir",
+        example_hanzi: "对不起，我来晚了。",
+        example_pinyin: "Duìbuqǐ, wǒ lái wǎn le.",
+        example_es: "Perdón, llegué tarde."
+      },
+      {
+        id: "l5-025",
+        hanzi: "晚",
+        pinyin: "wǎn",
+        meaning: "tarde",
+        example_hanzi: "我来晚了。",
+        example_pinyin: "Wǒ lái wǎn le.",
+        example_es: "Llegué tarde."
+      },
+      {
+        id: "l5-026",
+        hanzi: "了",
+        pinyin: "le",
+        meaning: "partícula de cambio de estado o acción completada",
+        example_hanzi: "我来晚了。",
+        example_pinyin: "Wǒ lái wǎn le.",
+        example_es: "Llegué tarde."
+      }
+    ]
+  }
+]
     };
 
     const STORAGE_KEY = "chino_flashcards_state_v1";
