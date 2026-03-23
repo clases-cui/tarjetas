@@ -204,20 +204,57 @@
     }
 
     .detail-value {
-      font-size: 1.05rem;
-      line-height: 1.55;
+      font-size: 1.5rem;
+      text-align: center;
+      line-height: 1.6;
+    }
+
+    .detail-value-hanzi {
+      font-size: 1.6rem;
+      line-height: 1.35;
+      font-weight: 700;
+      margin-bottom: 8px;
     }
 
     .example-main {
-      font-size: 1.15rem;
-      margin-bottom: 6px;
-      font-weight: 600;
+      font-size: 1.6rem;
+      margin-bottom: 8px;
+      font-weight: 700;
     }
 
     .example-sub {
       color: var(--muted);
       margin-bottom: 4px;
     }
+
+    .example-translation.hidden-text {
+      display: none;
+    }
+
+    .detail-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .toggle-translation-btn {
+      background: transparent;
+      border: 1px solid #d8e2f0;
+      border-radius: 10px;
+      padding: 6px 8px;
+      font-size: 0.95rem;
+      line-height: 1;
+      color: var(--muted);
+      min-width: 40px;
+    }
+
+    .toggle-translation-btn:hover {
+      background: #f8fbff;
+    }
+
+    
 
     .controls {
       display: flex;
@@ -329,11 +366,14 @@
             <div id="detail-meaning" class="detail-value"></div>
           </div>
           <div class="detail-item">
-            <div class="detail-label">Oración de ejemplo</div>
+            <div class="detail-header">
+              <div class="detail-label" style="margin-bottom: 0;">Oración de ejemplo</div>
+              <button id="btn-toggle-example-translation" class="toggle-translation-btn" type="button" aria-label="Mostrar u ocultar traducción de la oración" title="Mostrar u ocultar traducción de la oración">🙈</button>
+            </div>
             <div class="detail-value">
-              <div id="detail-example-hanzi" class="example-main"></div>
-              <div id="detail-example-pinyin" class="example-sub"></div>
-              <div id="detail-example-es"></div>
+              <div id="detail-example-hanzi" class="detail-value-hanzi"></div>
+              <div id="detail-example-pinyin" class="example-sub example-translation hidden-text"></div>
+              <div id="detail-example-es" class="example-translation hidden-text"></div>
             </div>
           </div>
         </div>
@@ -1569,6 +1609,7 @@
       currentCard: null,
       revealed: false,
       mode: "study",
+      exampleTranslationVisible: false,
       stats: {
         total: 0,
         correct: 0,
@@ -1697,6 +1738,24 @@
       saveState();
     }
 
+    function updateExampleTranslationVisibility() {
+      const pinyinEl = $("detail-example-pinyin");
+      const esEl = $("detail-example-es");
+      const btn = $("btn-toggle-example-translation");
+      const hidden = !state.exampleTranslationVisible;
+
+      pinyinEl.classList.toggle("hidden-text", hidden);
+      esEl.classList.toggle("hidden-text", hidden);
+      btn.textContent = hidden ? "🙈" : "👁";
+      btn.setAttribute("aria-pressed", String(!hidden));
+      btn.setAttribute(
+        "title",
+        hidden
+          ? "Mostrar traducción de la oración"
+          : "Ocultar traducción de la oración"
+      );
+    }
+
     function renderCurrentCard() {
       if (!state.currentCard) {
         finishRound();
@@ -1709,6 +1768,7 @@
       $("detail-example-hanzi").textContent = state.currentCard.example_hanzi;
       $("detail-example-pinyin").textContent = state.currentCard.example_pinyin;
       $("detail-example-es").textContent = state.currentCard.example_es;
+      updateExampleTranslationVisibility();
 
       $("details").classList.toggle("hidden", !state.revealed);
       $("controls-hidden").classList.toggle("hidden", state.revealed);
@@ -1743,6 +1803,7 @@
       state.currentIndex += 1;
       state.currentCard = state.queue[state.currentIndex] || null;
       state.revealed = false;
+      state.exampleTranslationVisible = false;
 
       if (!state.currentCard) {
         finishRound();
@@ -1787,6 +1848,7 @@
       state.currentCard = state.queue[0] || null;
       state.revealed = false;
       state.mode = "review";
+      state.exampleTranslationVisible = false;
       state.stats = {
         total: state.queue.length,
         correct: 0,
@@ -1835,6 +1897,14 @@
       });
 
       $("btn-show").addEventListener("click", revealAnswer);
+
+      $("btn-toggle-example-translation").addEventListener("click", (event) => {
+        event.stopPropagation();
+        state.exampleTranslationVisible = !state.exampleTranslationVisible;
+        updateExampleTranslationVisibility();
+        saveState();
+      });
+
       $("flashcard").addEventListener("click", () => {
         if (!state.revealed && state.currentCard) revealAnswer();
       });
