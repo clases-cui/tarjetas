@@ -1,0 +1,1456 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>听力练习 · Práctica de escucha</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="shortcut icon" href="favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Noto+Sans+SC:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1410;
+    --paper: #f5f0e8;
+    --paper2: #ede7d9;
+    --red: #c0392b;
+    --red-soft: #e8574a;
+    --gold: #c9952a;
+    --jade: #2e7d6e;
+    --jade-soft: #3a9e8d;
+    --mist: #8a8278;
+    --correct: #2e7d6e;
+    --wrong: #c0392b;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Noto Sans SC', sans-serif;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* Background texture */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(ellipse at 20% 50%, rgba(201,149,42,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 20%, rgba(46,125,110,0.06) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Vertical decorative stripe */
+  .stripe {
+    position: fixed;
+    left: 0; top: 0; bottom: 0;
+    width: 6px;
+    background: linear-gradient(to bottom, var(--red) 0%, var(--gold) 50%, var(--red) 100%);
+    z-index: 10;
+  }
+  .stripe-right {
+    left: auto; right: 0;
+    width: 3px;
+    background: linear-gradient(to bottom, var(--gold) 0%, transparent 100%);
+  }
+
+  .container {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 48px 32px 80px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Header */
+  header {
+    display: flex;
+    align-items: flex-end;
+    gap: 20px;
+    margin-bottom: 48px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid rgba(26,20,16,0.15);
+  }
+  .title-zh {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 2.6rem;
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: 4px;
+    line-height: 1;
+  }
+  .title-sub {
+    font-size: 0.78rem;
+    letter-spacing: 3px;
+    color: var(--mist);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .badge {
+    background: var(--red);
+    color: white;
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    padding: 3px 10px;
+    margin-left: auto;
+    align-self: center;
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* Progress */
+  .progress-bar-wrap {
+    height: 3px;
+    background: rgba(26,20,16,0.1);
+    margin-bottom: 40px;
+    position: relative;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(to right, var(--red), var(--gold));
+    transition: width 0.5s ease;
+    width: 0%;
+  }
+  .progress-label {
+    position: absolute;
+    right: 0;
+    top: 8px;
+    font-size: 0.7rem;
+    font-family: 'DM Mono', monospace;
+    color: var(--mist);
+    letter-spacing: 1px;
+  }
+
+  /* Score strip */
+  .score-strip {
+    display: flex;
+    gap: 32px;
+    margin-bottom: 40px;
+    padding: 16px 24px;
+    background: var(--paper2);
+    border-left: 3px solid var(--gold);
+  }
+  .score-item {
+    text-align: center;
+  }
+  .score-num {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    line-height: 1;
+  }
+  .score-num.green { color: var(--jade); }
+  .score-num.red { color: var(--red); }
+  .score-num.gold { color: var(--gold); }
+  .score-lbl {
+    font-size: 0.65rem;
+    color: var(--mist);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  /* Question card */
+  .card {
+    background: white;
+    border: 1px solid rgba(26,20,16,0.1);
+    box-shadow: 4px 4px 0 rgba(26,20,16,0.06);
+    padding: 36px 36px 32px;
+    margin-bottom: 24px;
+    position: relative;
+    animation: slideIn 0.35s ease;
+  }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .card-number {
+    position: absolute;
+    top: -1px; right: 24px;
+    background: var(--red);
+    color: white;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    padding: 4px 10px;
+    letter-spacing: 2px;
+  }
+
+  /* Audio player */
+  .audio-zone {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  .play-btn {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    border: 2px solid var(--ink);
+    background: var(--ink);
+    color: white;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+    transition: all 0.18s ease;
+    position: relative;
+  }
+  .play-btn:hover { background: var(--red); border-color: var(--red); transform: scale(1.05); }
+  .play-btn.playing { background: var(--red-soft); border-color: var(--red-soft); }
+  .play-btn svg { width: 20px; height: 20px; fill: white; }
+
+  .audio-info { flex: 1; }
+  .audio-title {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 0.85rem;
+    color: var(--mist);
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+  .waveform {
+    height: 28px;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+  }
+  .wave-bar {
+    width: 3px;
+    background: var(--ink);
+    border-radius: 2px;
+    opacity: 0.25;
+    transition: height 0.1s ease, opacity 0.1s ease;
+  }
+  .wave-bar.active { opacity: 0.7; }
+  .play-count {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--mist);
+    letter-spacing: 1px;
+    margin-top: 4px;
+  }
+
+  /* Question text */
+  .question-text {
+    font-size: 0.85rem;
+    color: var(--mist);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .question-text::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(26,20,16,0.1);
+  }
+
+  /* Options */
+  .options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .option-btn {
+    border: 1.5px solid rgba(26,20,16,0.15);
+    background: var(--paper);
+    cursor: pointer;
+    padding: 16px 20px;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    transition: all 0.18s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .option-btn:hover:not(:disabled) {
+    border-color: var(--ink);
+    background: white;
+    transform: translateY(-1px);
+    box-shadow: 2px 2px 0 rgba(26,20,16,0.1);
+  }
+  .option-btn:disabled { cursor: default; }
+  .option-btn.correct {
+    border-color: var(--correct);
+    background: rgba(46,125,110,0.06);
+  }
+  .option-btn.wrong {
+    border-color: var(--wrong);
+    background: rgba(192,57,43,0.06);
+  }
+  .opt-letter {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    width: 22px; height: 22px;
+    border: 1px solid currentColor;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    color: var(--mist);
+    transition: all 0.18s ease;
+  }
+  .option-btn.correct .opt-letter {
+    background: var(--correct);
+    border-color: var(--correct);
+    color: white;
+  }
+  .option-btn.wrong .opt-letter {
+    background: var(--wrong);
+    border-color: var(--wrong);
+    color: white;
+  }
+  .opt-text { line-height: 1.3; }
+  .opt-zh {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 1.25rem;
+    display: block;
+  }
+  .opt-py {
+    font-size: 0.72rem;
+    color: var(--mist);
+    font-style: italic;
+    display: block;
+    margin-top: 2px;
+  }
+  .opt-es {
+    font-size: 0.72rem;
+    color: var(--mist);
+    display: block;
+    margin-top: 1px;
+  }
+
+  /* Feedback */
+  .feedback {
+    margin-top: 20px;
+    padding: 16px 20px;
+    border-left: 3px solid var(--correct);
+    background: rgba(46,125,110,0.06);
+    display: none;
+    animation: fadeIn 0.3s ease;
+  }
+  .feedback.wrong { border-color: var(--wrong); background: rgba(192,57,43,0.06); }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .feedback-label {
+    font-size: 0.68rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--jade);
+    font-family: 'DM Mono', monospace;
+    margin-bottom: 6px;
+  }
+  .feedback.wrong .feedback-label { color: var(--red); }
+  .feedback-content {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 1.1rem;
+    color: var(--ink);
+  }
+  .feedback-py {
+    font-size: 0.8rem;
+    color: var(--mist);
+    margin-top: 4px;
+    font-style: italic;
+  }
+  .feedback-explanation {
+    font-size: 0.8rem;
+    color: var(--mist);
+    margin-top: 8px;
+    line-height: 1.6;
+  }
+
+  /* Controls */
+  .controls {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+  }
+  .btn {
+    padding: 12px 28px;
+    border: 1.5px solid var(--ink);
+    background: var(--ink);
+    color: white;
+    cursor: pointer;
+    font-family: 'Noto Sans SC', sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    transition: all 0.18s ease;
+    display: none;
+  }
+  .btn:hover { background: var(--red); border-color: var(--red); }
+  .btn.secondary {
+    background: transparent;
+    color: var(--ink);
+  }
+  .btn.secondary:hover { background: var(--paper2); border-color: var(--ink); color: var(--ink); }
+  .btn.visible { display: inline-block; }
+
+  /* Mode selector */
+  .mode-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+  }
+  .mode-btn {
+    padding: 6px 16px;
+    border: 1px solid rgba(26,20,16,0.2);
+    background: transparent;
+    cursor: pointer;
+    font-family: 'Noto Sans SC', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 1px;
+    transition: all 0.15s ease;
+    color: var(--mist);
+  }
+  .mode-btn:hover { border-color: var(--ink); color: var(--ink); }
+  .mode-btn.active { background: var(--ink); color: white; border-color: var(--ink); }
+
+  /* Text input mode */
+  .text-input-zone { display: none; margin-bottom: 16px; }
+  .text-input-zone.visible { display: block; }
+  .text-input {
+    width: 100%;
+    padding: 14px 18px;
+    border: 1.5px solid rgba(26,20,16,0.2);
+    background: white;
+    font-family: 'Noto Serif SC', serif;
+    font-size: 1.3rem;
+    color: var(--ink);
+    outline: none;
+    transition: border 0.18s;
+    letter-spacing: 2px;
+  }
+  .text-input:focus { border-color: var(--ink); }
+  .text-input::placeholder {
+    font-family: 'Noto Sans SC', sans-serif;
+    font-size: 0.85rem;
+    color: rgba(138,130,120,0.6);
+    letter-spacing: 1px;
+  }
+  .text-input-hint {
+    font-size: 0.72rem;
+    color: var(--mist);
+    margin-top: 6px;
+    letter-spacing: 1px;
+  }
+
+  /* Upload zone */
+  .upload-section {
+    background: white;
+    border: 1px solid rgba(26,20,16,0.1);
+    padding: 32px;
+    margin-bottom: 32px;
+    text-align: center;
+    position: relative;
+  }
+  .upload-section h3 {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 1rem;
+    margin-bottom: 8px;
+    color: var(--ink);
+  }
+  .upload-section p {
+    font-size: 0.8rem;
+    color: var(--mist);
+    margin-bottom: 20px;
+    line-height: 1.6;
+  }
+  .upload-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .upload-zone {
+    border: 1.5px dashed rgba(26,20,16,0.25);
+    padding: 24px 16px;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    position: relative;
+  }
+  .upload-zone:hover { border-color: var(--ink); background: var(--paper2); }
+  .upload-zone input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+  .upload-icon { font-size: 1.8rem; margin-bottom: 8px; display: block; }
+  .upload-label { font-size: 0.75rem; color: var(--mist); letter-spacing: 1px; }
+  .upload-sublabel { font-size: 0.65rem; color: rgba(138,130,120,0.7); margin-top: 4px; }
+  .file-list { text-align: left; }
+  .file-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 12px;
+    background: var(--paper2);
+    margin-bottom: 4px;
+    font-size: 0.78rem;
+  }
+  .file-item .file-icon { color: var(--red); }
+  .file-item .file-name { flex: 1; font-family: 'DM Mono', monospace; font-size: 0.72rem; }
+  .file-item .file-remove {
+    color: var(--mist); cursor: pointer; padding: 2px 6px;
+    background: none; border: none; font-size: 0.9rem;
+  }
+  .file-item .file-remove:hover { color: var(--red); }
+
+  /* Built-in exercises banner */
+  .builtin-banner {
+    background: linear-gradient(135deg, rgba(46,125,110,0.08) 0%, rgba(201,149,42,0.08) 100%);
+    border: 1px solid rgba(46,125,110,0.2);
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .builtin-icon { font-size: 1.5rem; }
+  .builtin-text { flex: 1; }
+  .builtin-text strong { font-family: 'Noto Serif SC', serif; font-size: 0.9rem; display: block; margin-bottom: 3px; }
+  .builtin-text span { font-size: 0.75rem; color: var(--mist); }
+
+  /* Final screen */
+  .final-screen {
+    display: none;
+    text-align: center;
+    padding: 60px 32px;
+    animation: slideIn 0.4s ease;
+  }
+  .final-score-zh {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 4rem;
+    font-weight: 700;
+    color: var(--red);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .final-label {
+    font-size: 0.72rem;
+    letter-spacing: 4px;
+    color: var(--mist);
+    text-transform: uppercase;
+    margin-bottom: 32px;
+  }
+  .final-stats {
+    display: flex;
+    justify-content: center;
+    gap: 48px;
+    margin-bottom: 40px;
+  }
+  .final-restart {
+    padding: 14px 48px;
+    border: 1.5px solid var(--ink);
+    background: var(--ink);
+    color: white;
+    cursor: pointer;
+    font-family: 'Noto Sans SC', sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 3px;
+    transition: all 0.18s ease;
+  }
+  .final-restart:hover { background: var(--red); border-color: var(--red); }
+
+  /* Tooltip / helper */
+  .helper {
+    background: var(--paper2);
+    border-left: 3px solid var(--gold);
+    padding: 14px 18px;
+    margin-bottom: 28px;
+    font-size: 0.78rem;
+    color: var(--mist);
+    line-height: 1.7;
+  }
+  .helper strong { color: var(--ink); }
+
+  @media (max-width: 560px) {
+    .container { padding: 32px 20px 60px; }
+    .options { grid-template-columns: 1fr; }
+    .title-zh { font-size: 2rem; }
+    .upload-grid { grid-template-columns: 1fr; }
+    .final-stats { gap: 28px; }
+  }
+</style>
+</head>
+<body>
+<div class="stripe"></div>
+<div class="stripe stripe-right"></div>
+
+<div class="container">
+
+  <!-- Header -->
+  <header>
+    <div>
+      <div class="title-sub">听力练习</div>
+      <div class="title-zh">HSK</div>
+    </div>
+    <div style="margin-bottom:4px">
+      <div class="title-zh" style="color:var(--red)">练耳朵</div>
+      <div style="font-size:0.72rem;color:var(--mist);letter-spacing:1px;margin-top:2px">Entrenamiento auditivo</div>
+    </div>
+    <div class="badge">HSK 1–2</div>
+  </header>
+
+  <!-- Helper -->
+  <div class="helper" id="helper">
+    <strong>¿Cómo funciona?</strong> Escuchá el audio, después elegí la opción correcta (o escribí la respuesta en pinyin/caracteres).
+    Podés subir tus propios MP3 de exámenes HSK usando el botón de abajo, o practicar con los <strong>ejercicios incluidos</strong> por lote.
+    Cada audio se puede reproducir varias veces antes de responder.
+  </div>
+
+  <!-- Upload section -->
+  <div class="upload-section" id="uploadSection">
+    <h3>📁 Subir audios HSK</h3>
+    <p>Subí tus MP3 de práctica HSK. También podés subir un archivo JSON con las preguntas y opciones.<br>
+    Si no tenés archivos, usá los ejercicios incluidos abajo.</p>
+    <div class="upload-grid">
+      <div class="upload-zone">
+        <input type="file" id="audioUpload" accept=".mp3,.wav,.ogg,.m4a" multiple>
+        <span class="upload-icon">🎵</span>
+        <div class="upload-label">Archivos de audio</div>
+        <div class="upload-sublabel">MP3, WAV, OGG, M4A</div>
+      </div>
+      <div class="upload-zone">
+        <input type="file" id="jsonUpload" accept=".json">
+        <span class="upload-icon">📋</span>
+        <div class="upload-label">Preguntas (JSON)</div>
+        <div class="upload-sublabel">Formato incluido abajo</div>
+      </div>
+    </div>
+    <div class="file-list" id="fileList"></div>
+    <button class="btn visible" id="startWithUploads" style="display:none;margin-top:12px">
+      Iniciar con mis archivos →
+    </button>
+  </div>
+
+
+  <!-- Practice selector -->
+  <div class="upload-section" id="practiceSetup" style="text-align:left">
+    <h3>🧩 Elegir lote y modo</h3>
+    <p>Mantenés el lote actual y además podés practicar por lección. Elegí el conjunto de frases y el formato de respuesta antes de empezar.</p>
+
+    <div class="setup-grid" style="display:grid;grid-template-columns:1.2fr 1fr;gap:16px">
+      <div>
+        <label for="practiceSet" style="display:block;font-size:0.72rem;letter-spacing:1px;color:var(--mist);margin-bottom:8px">Lote a practicar</label>
+        <select id="practiceSet" style="width:100%;padding:12px 14px;border:1.5px solid rgba(26,20,16,0.2);background:white;font-family:'Noto Sans SC',sans-serif;font-size:0.85rem;color:var(--ink)">
+        </select>
+        <div id="practiceSetMeta" style="margin-top:10px;font-size:0.74rem;color:var(--mist);line-height:1.6"></div>
+      </div>
+      <div>
+        <label for="startMode" style="display:block;font-size:0.72rem;letter-spacing:1px;color:var(--mist);margin-bottom:8px">Modo de práctica</label>
+        <select id="startMode" style="width:100%;padding:12px 14px;border:1.5px solid rgba(26,20,16,0.2);background:white;font-family:'Noto Sans SC',sans-serif;font-size:0.85rem;color:var(--ink)">
+          <option value="options">Opciones múltiples</option>
+          <option value="type">Escribir respuesta</option>
+          <option value="pinyin">Solo pinyin</option>
+        </select>
+        <div style="margin-top:10px;font-size:0.74rem;color:var(--mist);line-height:1.6">
+          También podés cambiar el modo después, durante la práctica.
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:18px">
+      <button class="btn visible" id="startSelectedBuiltin" style="display:inline-block">Empezar lote elegido →</button>
+    </div>
+  </div>
+
+  <!-- Built-in exercises -->
+  <div class="builtin-banner">
+    <div class="builtin-icon">✨</div>
+    <div class="builtin-text">
+      <strong>Ejercicios incluidos — sin archivos</strong>
+      <span>Incluye el lote original y nuevos lotes por lección con audio sintetizado del navegador</span>
+    </div>
+    <button class="btn visible" id="startBuiltin" style="padding:10px 20px;font-size:0.72rem">
+      Empezar lote actual →
+    </button>
+  </div>
+
+  <!-- Mode selector -->
+  <div class="mode-row" id="modeRow" style="display:none">
+    <button class="mode-btn active" data-mode="options">Opciones múltiples</button>
+    <button class="mode-btn" data-mode="type">Escribir respuesta</button>
+    <button class="mode-btn" data-mode="pinyin">Solo pinyin</button>
+  </div>
+
+  <!-- Progress -->
+  <div id="progressArea" style="display:none">
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="progressFill"></div>
+      <div class="progress-label" id="progressLabel">0 / 0</div>
+    </div>
+    <div class="score-strip">
+      <div class="score-item">
+        <div class="score-num green" id="scoreCorrect">0</div>
+        <div class="score-lbl">Correctas</div>
+      </div>
+      <div class="score-item">
+        <div class="score-num red" id="scoreWrong">0</div>
+        <div class="score-lbl">Incorrectas</div>
+      </div>
+      <div class="score-item">
+        <div class="score-num gold" id="scoreRemain">0</div>
+        <div class="score-lbl">Restantes</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Question card -->
+  <div id="questionCard" style="display:none">
+    <div class="card" id="theCard">
+      <div class="card-number" id="cardNumber">01</div>
+
+      <div class="audio-zone">
+        <button class="play-btn" id="playBtn" onclick="playAudio()">
+          <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        </button>
+        <div class="audio-info">
+          <div class="audio-title" id="audioTitle">Audio HSK</div>
+          <div class="waveform" id="waveform"></div>
+          <div class="play-count" id="playCount">Reproducción 0</div>
+        </div>
+      </div>
+
+      <div class="question-text">¿Qué significa lo que escuchaste?</div>
+
+      <!-- Multiple choice -->
+      <div class="options" id="optionsZone"></div>
+
+      <!-- Text input -->
+      <div class="text-input-zone" id="textInputZone">
+        <input type="text" class="text-input" id="textInput" placeholder="Escribí en caracteres (你好) o pinyin (nǐ hǎo)..." autocomplete="off" autocorrect="off">
+        <div class="text-input-hint">Aceptamos caracteres chinos o pinyin con o sin tonos</div>
+        <div style="margin-top:12px">
+          <button class="btn visible" id="checkTextBtn" onclick="checkTextAnswer()">Verificar</button>
+        </div>
+      </div>
+
+      <!-- Feedback -->
+      <div class="feedback" id="feedback">
+        <div class="feedback-label" id="feedbackLabel">Correcto</div>
+        <div class="feedback-content" id="feedbackContent"></div>
+        <div class="feedback-py" id="feedbackPy"></div>
+        <div class="feedback-explanation" id="feedbackExpl"></div>
+      </div>
+
+      <!-- Controls -->
+      <div class="controls">
+        <button class="btn" id="nextBtn" onclick="nextQuestion()">Siguiente →</button>
+        <button class="btn secondary" id="showAnswerBtn" onclick="showAnswer()">Ver respuesta</button>
+        <button class="btn secondary visible" onclick="toggleHelper()" style="margin-left:auto;font-size:0.7rem;padding:10px 16px">?</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Final screen -->
+  <div class="final-screen" id="finalScreen">
+    <div class="final-score-zh" id="finalPct">—</div>
+    <div class="final-label">Resultado final · 最终结果</div>
+    <div class="final-stats">
+      <div class="score-item">
+        <div class="score-num green" id="finalCorrect">0</div>
+        <div class="score-lbl">Correctas</div>
+      </div>
+      <div class="score-item">
+        <div class="score-num red" id="finalWrong">0</div>
+        <div class="score-lbl">Incorrectas</div>
+      </div>
+    </div>
+    <button class="final-restart" onclick="restart()">再练一次 · Practicar de nuevo</button>
+  </div>
+
+  <!-- JSON format help -->
+  <details style="margin-top:40px">
+    <summary style="font-size:0.75rem;color:var(--mist);letter-spacing:1px;cursor:pointer;padding:8px 0">
+      📄 Formato del archivo JSON para tus propios ejercicios
+    </summary>
+    <div style="background:var(--ink);color:#c9c0b4;padding:20px;margin-top:8px;font-family:'DM Mono',monospace;font-size:0.72rem;line-height:1.8;overflow-x:auto">
+<pre>[
+  {
+    "id": 1,
+    "audioFile": "audio1.mp3",
+    "audioText": "nǐ hǎo",
+    "question": "¿Qué significa este saludo?",
+    "correct": 0,
+    "options": [
+      { "zh": "你好", "py": "nǐ hǎo", "es": "Hola" },
+      { "zh": "谢谢", "py": "xiè xie", "es": "Gracias" },
+      { "zh": "再见", "py": "zài jiàn", "es": "Adiós" },
+      { "zh": "对不起", "py": "duì bu qǐ", "es": "Lo siento" }
+    ],
+    "explanation": "你好 es el saludo más común en mandarín."
+  }
+]</pre>
+    </div>
+    <div style="font-size:0.72rem;color:var(--mist);margin-top:8px;line-height:1.7">
+      <strong>Nota:</strong> El campo <code>audioFile</code> debe coincidir con el nombre del MP3 que subiste.
+      Si no tenés MP3, podés dejar el campo vacío y se usará síntesis de voz (Web Speech API).
+    </div>
+  </details>
+
+</div><!-- /container -->
+
+<script>
+// ─── BUILT-IN EXERCISES ────────────────────────────────────────────────────
+const builtinExercises = [
+  {
+    id:1, audioText:"nǐ hǎo", ttsSpeech:"你好",
+    question:"¿Qué significa este saludo?",
+    correct:0,
+    options:[
+      {zh:"你好",py:"nǐ hǎo",es:"Hola"},
+      {zh:"再见",py:"zài jiàn",es:"Adiós"},
+      {zh:"谢谢",py:"xiè xie",es:"Gracias"},
+      {zh:"不好",py:"bù hǎo",es:"No está bien"}
+    ],
+    explanation:"你好 es el saludo estándar. 你 = tú, 好 = bueno/bien."
+  },
+  {
+    id:2, audioText:"xiè xie", ttsSpeech:"谢谢",
+    question:"¿Qué se está expresando?",
+    correct:2,
+    options:[
+      {zh:"对不起",py:"duì bu qǐ",es:"Lo siento"},
+      {zh:"没关系",py:"méi guān xi",es:"No importa"},
+      {zh:"谢谢",py:"xiè xie",es:"Gracias"},
+      {zh:"再见",py:"zài jiàn",es:"Adiós"}
+    ],
+    explanation:"谢谢 = gracias. Se puede repetir para ser más enfático: 谢谢你."
+  },
+  {
+    id:3, audioText:"wǒ shì lǎo shī", ttsSpeech:"我是老师",
+    question:"¿Qué profesión se menciona?",
+    correct:1,
+    options:[
+      {zh:"医生",py:"yī shēng",es:"Médico"},
+      {zh:"老师",py:"lǎo shī",es:"Maestro/a"},
+      {zh:"学生",py:"xué shēng",es:"Estudiante"},
+      {zh:"朋友",py:"péng you",es:"Amigo/a"}
+    ],
+    explanation:"我是老师 = Yo soy maestro/a. 我 = yo, 是 = ser, 老师 = maestro."
+  },
+  {
+    id:4, audioText:"jīn tiān tiān qì zěn me yàng", ttsSpeech:"今天天气怎么样",
+    question:"¿Sobre qué se pregunta?",
+    correct:0,
+    options:[
+      {zh:"天气",py:"tiān qì",es:"El clima / tiempo"},
+      {zh:"时间",py:"shí jiān",es:"La hora"},
+      {zh:"饭菜",py:"fàn cài",es:"La comida"},
+      {zh:"工作",py:"gōng zuò",es:"El trabajo"}
+    ],
+    explanation:"今天天气怎么样 = ¿Cómo está el clima hoy? 今天 = hoy, 天气 = clima."
+  },
+  {
+    id:5, audioText:"wǒ xiǎng hē shuǐ", ttsSpeech:"我想喝水",
+    question:"¿Qué quiere la persona?",
+    correct:3,
+    options:[
+      {zh:"吃饭",py:"chī fàn",es:"Comer arroz/comida"},
+      {zh:"睡觉",py:"shuì jiào",es:"Dormir"},
+      {zh:"看书",py:"kàn shū",es:"Leer un libro"},
+      {zh:"喝水",py:"hē shuǐ",es:"Tomar agua"}
+    ],
+    explanation:"我想喝水 = Quiero tomar agua. 想 = querer/desear, 喝 = beber, 水 = agua."
+  },
+  {
+    id:6, audioText:"zhè ge duō shao qián", ttsSpeech:"这个多少钱",
+    question:"¿Qué se pregunta en esta frase?",
+    correct:2,
+    options:[
+      {zh:"时间",py:"shí jiān",es:"La hora"},
+      {zh:"名字",py:"míng zi",es:"El nombre"},
+      {zh:"价格",py:"jià gé",es:"El precio"},
+      {zh:"地方",py:"dì fāng",es:"El lugar"}
+    ],
+    explanation:"这个多少钱 = ¿Cuánto cuesta esto? 多少 = cuánto, 钱 = dinero."
+  },
+  {
+    id:7, audioText:"wǒ jiā yǒu sān gè rén", ttsSpeech:"我家有三个人",
+    question:"¿Cuántas personas hay en la familia?",
+    correct:1,
+    options:[
+      {zh:"两个",py:"liǎng gè",es:"Dos"},
+      {zh:"三个",py:"sān gè",es:"Tres"},
+      {zh:"四个",py:"sì gè",es:"Cuatro"},
+      {zh:"五个",py:"wǔ gè",es:"Cinco"}
+    ],
+    explanation:"我家有三个人 = En mi familia hay tres personas. 三 = tres, 个 = clasificador, 人 = persona."
+  },
+  {
+    id:8, audioText:"nǐ de shēng rì shì jǐ yuè jǐ hào", ttsSpeech:"你的生日是几月几号",
+    question:"¿Qué información se pide?",
+    correct:0,
+    options:[
+      {zh:"生日",py:"shēng rì",es:"El cumpleaños"},
+      {zh:"地址",py:"dì zhǐ",es:"La dirección"},
+      {zh:"电话",py:"diàn huà",es:"El teléfono"},
+      {zh:"名字",py:"míng zi",es:"El nombre"}
+    ],
+    explanation:"你的生日是几月几号 = ¿En qué mes y día es tu cumpleaños? 生日 = cumpleaños."
+  },
+  {
+    id:9, audioText:"wǒ bù zhī dào", ttsSpeech:"我不知道",
+    question:"¿Qué expresa esta frase?",
+    correct:2,
+    options:[
+      {zh:"我明白",py:"wǒ míng bai",es:"Entiendo"},
+      {zh:"我知道",py:"wǒ zhī dào",es:"Sé / Lo sé"},
+      {zh:"我不知道",py:"wǒ bù zhī dào",es:"No sé / No lo sé"},
+      {zh:"我忘了",py:"wǒ wàng le",es:"Lo olvidé"}
+    ],
+    explanation:"我不知道 = No sé. 不 es la negación. 知道 = saber."
+  },
+  {
+    id:10, audioText:"qǐng zuò", ttsSpeech:"请坐",
+    question:"¿Qué se invita a hacer?",
+    correct:3,
+    options:[
+      {zh:"请喝茶",py:"qǐng hē chá",es:"Tomar té"},
+      {zh:"请进",py:"qǐng jìn",es:"Pasar/entrar"},
+      {zh:"请等",py:"qǐng děng",es:"Esperar"},
+      {zh:"请坐",py:"qǐng zuò",es:"Sentarse"}
+    ],
+    explanation:"请坐 = Por favor, siéntate. 请 = por favor, 坐 = sentarse."
+  },
+  {
+    id:11, audioText:"xiàn zài jǐ diǎn", ttsSpeech:"现在几点",
+    question:"¿Qué se quiere saber?",
+    correct:1,
+    options:[
+      {zh:"日期",py:"rì qī",es:"La fecha"},
+      {zh:"时间",py:"shí jiān",es:"La hora"},
+      {zh:"地点",py:"dì diǎn",es:"El lugar"},
+      {zh:"价格",py:"jià gé",es:"El precio"}
+    ],
+    explanation:"现在几点 = ¿Qué hora es ahora? 现在 = ahora, 几点 = qué hora."
+  },
+  {
+    id:12, audioText:"wǒ xǐ huān chī miàn tiáo", ttsSpeech:"我喜欢吃面条",
+    question:"¿Qué le gusta comer?",
+    correct:0,
+    options:[
+      {zh:"面条",py:"miàn tiáo",es:"Fideos / tallarines"},
+      {zh:"米饭",py:"mǐ fàn",es:"Arroz blanco"},
+      {zh:"饺子",py:"jiǎo zi",es:"Dumplings"},
+      {zh:"包子",py:"bāo zi",es:"Baozi / bollos"}
+    ],
+    explanation:"我喜欢吃面条 = Me gustan los fideos. 喜欢 = gustar, 吃 = comer, 面条 = fideos."
+  },
+  {
+    id:13, audioText:"nǐ huì shuō zhōng wén ma", ttsSpeech:"你会说中文吗",
+    question:"¿Sobre qué habilidad se pregunta?",
+    correct:2,
+    options:[
+      {zh:"英文",py:"yīng wén",es:"Inglés"},
+      {zh:"日文",py:"rì wén",es:"Japonés"},
+      {zh:"中文",py:"zhōng wén",es:"Chino mandarín"},
+      {zh:"法文",py:"fǎ wén",es:"Francés"}
+    ],
+    explanation:"你会说中文吗 = ¿Sabes hablar chino? 会 = saber hacer algo, 说 = hablar, 中文 = chino."
+  },
+  {
+    id:14, audioText:"wǒ gōng zuò hěn máng", ttsSpeech:"我工作很忙",
+    question:"¿Cómo está el trabajo?",
+    correct:1,
+    options:[
+      {zh:"很累",py:"hěn lèi",es:"Muy cansado"},
+      {zh:"很忙",py:"hěn máng",es:"Muy ocupado"},
+      {zh:"很好",py:"hěn hǎo",es:"Muy bien"},
+      {zh:"很难",py:"hěn nán",es:"Muy difícil"}
+    ],
+    explanation:"我工作很忙 = Estoy muy ocupado con el trabajo. 忙 = ocupado/a, 很 = muy."
+  },
+  {
+    id:15, audioText:"míng tiān jiàn", ttsSpeech:"明天见",
+    question:"¿Cuándo se van a ver?",
+    correct:0,
+    options:[
+      {zh:"明天",py:"míng tiān",es:"Mañana"},
+      {zh:"今天",py:"jīn tiān",es:"Hoy"},
+      {zh:"后天",py:"hòu tiān",es:"Pasado mañana"},
+      {zh:"下周",py:"xià zhōu",es:"La semana que viene"}
+    ],
+    explanation:"明天见 = Hasta mañana / Nos vemos mañana. 明天 = mañana, 见 = verse."
+  }
+];
+
+
+const lessonPhraseSets = [{"id": "leccion-4-frases", "title": "Lección 4 - Frases", "description": "50 frases cortas usando el vocabulario adjunto, sin nombres propios", "items": [{"id": "l4f-001", "hanzi": "这是老师。", "pinyin": "Zhè shì lǎoshī.", "meaning": "Este es el profesor.", "example_hanzi": "那也是老师。", "example_pinyin": "Nà yě shì lǎoshī.", "example_es": "Ese también es profesor."}, {"id": "l4f-002", "hanzi": "那是谁？", "pinyin": "Nà shì shéi?", "meaning": "¿Quién es ese/a?", "example_hanzi": "那是朋友。", "example_pinyin": "Nà shì péngyou.", "example_es": "Ese es un amigo."}, {"id": "l4f-003", "hanzi": "她是老师吗？", "pinyin": "Tā shì lǎoshī ma?", "meaning": "¿Ella es profesora?", "example_hanzi": "她不是老师。", "example_pinyin": "Tā bú shì lǎoshī.", "example_es": "Ella no es profesora."}, {"id": "l4f-004", "hanzi": "他是医生。", "pinyin": "Tā shì yīshēng.", "meaning": "Él es médico.", "example_hanzi": "她也是医生。", "example_pinyin": "Tā yě shì yīshēng.", "example_es": "Ella también es médica."}, {"id": "l4f-005", "hanzi": "她不是医生。", "pinyin": "Tā bú shì yīshēng.", "meaning": "Ella no es médica.", "example_hanzi": "她是学生。", "example_pinyin": "Tā shì xuésheng.", "example_es": "Ella es estudiante."}, {"id": "l4f-006", "hanzi": "您是老师吗？", "pinyin": "Nín shì lǎoshī ma?", "meaning": "¿Usted es profesor/a?", "example_hanzi": "是，我是老师。", "example_pinyin": "Shì, wǒ shì lǎoshī.", "example_es": "Sí, soy profesor/a."}, {"id": "l4f-007", "hanzi": "您好！", "pinyin": "Nín hǎo!", "meaning": "¡Hola! (formal)", "example_hanzi": "老师，您好！", "example_pinyin": "Lǎoshī, nín hǎo!", "example_es": "¡Hola, profesor!"}, {"id": "l4f-008", "hanzi": "你认识她吗？", "pinyin": "Nǐ rènshi tā ma?", "meaning": "¿La conoces?", "example_hanzi": "我认识她。", "example_pinyin": "Wǒ rènshi tā.", "example_es": "La conozco."}, {"id": "l4f-009", "hanzi": "我认识老师。", "pinyin": "Wǒ rènshi lǎoshī.", "meaning": "Conozco al profesor.", "example_hanzi": "我也认识老师。", "example_pinyin": "Wǒ yě rènshi lǎoshī.", "example_es": "Yo también conozco al profesor."}, {"id": "l4f-010", "hanzi": "认识你很高兴。", "pinyin": "Rènshi nǐ hěn gāoxìng.", "meaning": "Mucho gusto en conocerte.", "example_hanzi": "我也很高兴。", "example_pinyin": "Wǒ yě hěn gāoxìng.", "example_es": "Yo también estoy muy contento."}, {"id": "l4f-011", "hanzi": "认识您很高兴。", "pinyin": "Rènshi nín hěn gāoxìng.", "meaning": "Mucho gusto en conocerlo/la.", "example_hanzi": "老师，我很高兴。", "example_pinyin": "Lǎoshī, wǒ hěn gāoxìng.", "example_es": "Profesor, estoy muy contento."}, {"id": "l4f-012", "hanzi": "我也很高兴。", "pinyin": "Wǒ yě hěn gāoxìng.", "meaning": "Yo también estoy muy contento.", "example_hanzi": "我们都很高兴。", "example_pinyin": "Wǒmen dōu hěn gāoxìng.", "example_es": "Todos nosotros estamos muy contentos."}, {"id": "l4f-013", "hanzi": "请进！", "pinyin": "Qǐng jìn!", "meaning": "¡Pase, por favor!", "example_hanzi": "老师，请进！", "example_pinyin": "Lǎoshī, qǐng jìn!", "example_es": "Profesor, pase por favor."}, {"id": "l4f-014", "hanzi": "可以进来吗？", "pinyin": "Kěyǐ jìnlái ma?", "meaning": "¿Puedo entrar?", "example_hanzi": "请进来。", "example_pinyin": "Qǐng jìnlái.", "example_es": "Entre, por favor."}, {"id": "l4f-015", "hanzi": "请问，您贵姓？", "pinyin": "Qǐngwèn, nín guìxìng?", "meaning": "Disculpe, ¿cuál es su apellido?", "example_hanzi": "我姓王。", "example_pinyin": "Wǒ xìng Wáng.", "example_es": "Mi apellido es Wang."}, {"id": "l4f-016", "hanzi": "你姓什么？", "pinyin": "Nǐ xìng shénme?", "meaning": "¿Cómo te apellidas?", "example_hanzi": "我姓李。", "example_pinyin": "Wǒ xìng Lǐ.", "example_es": "Mi apellido es Li."}, {"id": "l4f-017", "hanzi": "他是我朋友。", "pinyin": "Tā shì wǒ péngyou.", "meaning": "Él es mi amigo.", "example_hanzi": "她也是我朋友。", "example_pinyin": "Tā yě shì wǒ péngyou.", "example_es": "Ella también es mi amiga."}, {"id": "l4f-018", "hanzi": "这是我朋友。", "pinyin": "Zhè shì wǒ péngyou.", "meaning": "Este es mi amigo.", "example_hanzi": "那也是我朋友。", "example_pinyin": "Nà yě shì wǒ péngyou.", "example_es": "Ese también es mi amigo."}, {"id": "l4f-019", "hanzi": "他是记者。", "pinyin": "Tā shì jìzhě.", "meaning": "Él es periodista.", "example_hanzi": "她不是记者。", "example_pinyin": "Tā bú shì jìzhě.", "example_es": "Ella no es periodista."}, {"id": "l4f-020", "hanzi": "她是学生。", "pinyin": "Tā shì xuésheng.", "meaning": "Ella es estudiante.", "example_hanzi": "他也是学生。", "example_pinyin": "Tā yě shì xuésheng.", "example_es": "Él también es estudiante."}, {"id": "l4f-021", "hanzi": "我是学生。", "pinyin": "Wǒ shì xuésheng.", "meaning": "Soy estudiante.", "example_hanzi": "我是老师的学生。", "example_pinyin": "Wǒ shì lǎoshī de xuésheng.", "example_es": "Soy estudiante del profesor."}, {"id": "l4f-022", "hanzi": "我是学院的学生。", "pinyin": "Wǒ shì xuéyuàn de xuésheng.", "meaning": "Soy estudiante del instituto.", "example_hanzi": "他也是学院的学生。", "example_pinyin": "Tā yě shì xuéyuàn de xuésheng.", "example_es": "Él también es estudiante del instituto."}, {"id": "l4f-023", "hanzi": "她是老师的朋友。", "pinyin": "Tā shì lǎoshī de péngyou.", "meaning": "Ella es amiga del profesor.", "example_hanzi": "他也是老师的朋友。", "example_pinyin": "Tā yě shì lǎoshī de péngyou.", "example_es": "Él también es amigo del profesor."}, {"id": "l4f-024", "hanzi": "这是语言学院。", "pinyin": "Zhè shì yǔyán xuéyuàn.", "meaning": "Este es el instituto de lenguas.", "example_hanzi": "她在语言学院学习。", "example_pinyin": "Tā zài yǔyán xuéyuàn xuéxí.", "example_es": "Ella estudia en el instituto de lenguas."}, {"id": "l4f-025", "hanzi": "我学习汉语。", "pinyin": "Wǒ xuéxí Hànyǔ.", "meaning": "Estudio chino.", "example_hanzi": "他也学习汉语。", "example_pinyin": "Tā yě xuéxí Hànyǔ.", "example_es": "Él también estudia chino."}, {"id": "l4f-026", "hanzi": "你学习汉语吗？", "pinyin": "Nǐ xuéxí Hànyǔ ma?", "meaning": "¿Estudias chino?", "example_hanzi": "是，我学习汉语。", "example_pinyin": "Shì, wǒ xuéxí Hànyǔ.", "example_es": "Sí, estudio chino."}, {"id": "l4f-027", "hanzi": "他学习外语。", "pinyin": "Tā xuéxí wàiyǔ.", "meaning": "Él estudia una lengua extranjera.", "example_hanzi": "我也学习外语。", "example_pinyin": "Wǒ yě xuéxí wàiyǔ.", "example_es": "Yo también estudio una lengua extranjera."}, {"id": "l4f-028", "hanzi": "你学习什么？", "pinyin": "Nǐ xuéxí shénme?", "meaning": "¿Qué estudias?", "example_hanzi": "我学习汉语。", "example_pinyin": "Wǒ xuéxí Hànyǔ.", "example_es": "Estudio chino."}, {"id": "l4f-029", "hanzi": "她学习语言。", "pinyin": "Tā xuéxí yǔyán.", "meaning": "Ella estudia idiomas.", "example_hanzi": "我们都学习语言。", "example_pinyin": "Wǒmen dōu xuéxí yǔyán.", "example_es": "Todos nosotros estudiamos idiomas."}, {"id": "l4f-030", "hanzi": "这是什么？", "pinyin": "Zhè shì shénme?", "meaning": "¿Qué es esto?", "example_hanzi": "这是汉语书。", "example_pinyin": "Zhè shì Hànyǔ shū.", "example_es": "Este es un libro de chino."}, {"id": "l4f-031", "hanzi": "那是什么？", "pinyin": "Nà shì shénme?", "meaning": "¿Qué es eso?", "example_hanzi": "那是外语书。", "example_pinyin": "Nà shì wàiyǔ shū.", "example_es": "Ese es un libro de lengua extranjera."}, {"id": "l4f-032", "hanzi": "她是谁？", "pinyin": "Tā shì shéi?", "meaning": "¿Quién es ella?", "example_hanzi": "她是老师。", "example_pinyin": "Tā shì lǎoshī.", "example_es": "Ella es profesora."}, {"id": "l4f-033", "hanzi": "他是谁？", "pinyin": "Tā shì shéi?", "meaning": "¿Quién es él?", "example_hanzi": "他是医生。", "example_pinyin": "Tā shì yīshēng.", "example_es": "Él es médico."}, {"id": "l4f-034", "hanzi": "她是哪国人？", "pinyin": "Tā shì nǎ guó rén?", "meaning": "¿De qué país es ella?", "example_hanzi": "我不知道。", "example_pinyin": "Wǒ bù zhīdào.", "example_es": "No sé."}, {"id": "l4f-035", "hanzi": "你是哪国人？", "pinyin": "Nǐ shì nǎ guó rén?", "meaning": "¿De qué país eres?", "example_hanzi": "请问，他是哪国人？", "example_pinyin": "Qǐngwèn, tā shì nǎ guó rén?", "example_es": "Disculpe, ¿de qué país es él?"}, {"id": "l4f-036", "hanzi": "我们都是学生。", "pinyin": "Wǒmen dōu shì xuésheng.", "meaning": "Todos nosotros somos estudiantes.", "example_hanzi": "他们也都是学生。", "example_pinyin": "Tāmen yě dōu shì xuésheng.", "example_es": "Ellos también son todos estudiantes."}, {"id": "l4f-037", "hanzi": "我们都认识她。", "pinyin": "Wǒmen dōu rènshi tā.", "meaning": "Todos nosotros la conocemos.", "example_hanzi": "他们也都认识她。", "example_pinyin": "Tāmen yě dōu rènshi tā.", "example_es": "Ellos también la conocen."}, {"id": "l4f-038", "hanzi": "他们都是朋友。", "pinyin": "Tāmen dōu shì péngyou.", "meaning": "Ellos son todos amigos.", "example_hanzi": "我们也都是朋友。", "example_pinyin": "Wǒmen yě dōu shì péngyou.", "example_es": "Nosotros también somos todos amigos."}, {"id": "l4f-039", "hanzi": "老师，请问，她是谁？", "pinyin": "Lǎoshī, qǐngwèn, tā shì shéi?", "meaning": "Profesor, disculpe, ¿quién es ella?", "example_hanzi": "她是学生。", "example_pinyin": "Tā shì xuésheng.", "example_es": "Ella es estudiante."}, {"id": "l4f-040", "hanzi": "朋友，请进来。", "pinyin": "Péngyou, qǐng jìnlái.", "meaning": "Amigo, entra por favor.", "example_hanzi": "请进来，坐。", "example_pinyin": "Qǐng jìnlái, zuò.", "example_es": "Entra, por favor, siéntate."}, {"id": "l4f-041", "hanzi": "老师，您好，我是学生。", "pinyin": "Lǎoshī, nín hǎo, wǒ shì xuésheng.", "meaning": "Profesor, hola, soy estudiante.", "example_hanzi": "您好，我也是学生。", "example_pinyin": "Nín hǎo, wǒ yě shì xuésheng.", "example_es": "Hola, yo también soy estudiante."}, {"id": "l4f-042", "hanzi": "这是我的外婆。", "pinyin": "Zhè shì wǒ de wàipó.", "meaning": "Esta es mi abuela materna.", "example_hanzi": "外婆，您好！", "example_pinyin": "Wàipó, nín hǎo!", "example_es": "¡Hola, abuela materna!"}, {"id": "l4f-043", "hanzi": "那是我的奶奶。", "pinyin": "Nà shì wǒ de nǎinai.", "meaning": "Esa es mi abuela paterna.", "example_hanzi": "奶奶很好。", "example_pinyin": "Nǎinai hěn hǎo.", "example_es": "La abuela paterna está muy bien."}, {"id": "l4f-044", "hanzi": "外婆是老师吗？", "pinyin": "Wàipó shì lǎoshī ma?", "meaning": "¿La abuela materna es profesora?", "example_hanzi": "不是，她不是老师。", "example_pinyin": "Bú shì, tā bú shì lǎoshī.", "example_es": "No, ella no es profesora."}, {"id": "l4f-045", "hanzi": "奶奶认识老师吗？", "pinyin": "Nǎinai rènshi lǎoshī ma?", "meaning": "¿La abuela paterna conoce al profesor?", "example_hanzi": "认识，她认识老师。", "example_pinyin": "Rènshi, tā rènshi lǎoshī.", "example_es": "Sí, ella conoce al profesor."}, {"id": "l4f-046", "hanzi": "朋友也学习汉语。", "pinyin": "Péngyou yě xuéxí Hànyǔ.", "meaning": "El amigo también estudia chino.", "example_hanzi": "我们都学习汉语。", "example_pinyin": "Wǒmen dōu xuéxí Hànyǔ.", "example_es": "Todos nosotros estudiamos chino."}, {"id": "l4f-047", "hanzi": "记者学习外语吗？", "pinyin": "Jìzhě xuéxí wàiyǔ ma?", "meaning": "¿El periodista estudia una lengua extranjera?", "example_hanzi": "是，他学习外语。", "example_pinyin": "Shì, tā xuéxí wàiyǔ.", "example_es": "Sí, él estudia una lengua extranjera."}, {"id": "l4f-048", "hanzi": "老师和学生都很高兴。", "pinyin": "Lǎoshī hé xuésheng dōu hěn gāoxìng.", "meaning": "El profesor y los estudiantes están todos muy contentos.", "example_hanzi": "我们也很高兴。", "example_pinyin": "Wǒmen yě hěn gāoxìng.", "example_es": "Nosotros también estamos muy contentos."}, {"id": "l4f-049", "hanzi": "请问，这是不是汉语书？", "pinyin": "Qǐngwèn, zhè shì bú shì Hànyǔ shū?", "meaning": "Disculpe, ¿este es o no es un libro de chino?", "example_hanzi": "是，这是汉语书。", "example_pinyin": "Shì, zhè shì Hànyǔ shū.", "example_es": "Sí, este es un libro de chino."}, {"id": "l4f-050", "hanzi": "可以请老师进来吗？", "pinyin": "Kěyǐ qǐng lǎoshī jìnlái ma?", "meaning": "¿Se puede hacer pasar al profesor?", "example_hanzi": "可以，请老师进来。", "example_pinyin": "Kěyǐ, qǐng lǎoshī jìnlái.", "example_es": "Sí, haga pasar al profesor."}]}, {"id": "leccion-5-frases", "title": "Lección 5 - Frases", "description": "50 frases cortas usando vocabulario de las lecciones 1 a 5", "items": [{"id": "l5f-001", "hanzi": "你好。", "pinyin": "Nǐ hǎo.", "meaning": "Hola.", "example_hanzi": "老师，您好。", "example_pinyin": "Lǎoshī, nín hǎo.", "example_es": "Hola, profesor."}, {"id": "l5f-002", "hanzi": "你好吗？", "pinyin": "Nǐ hǎo ma?", "meaning": "¿Cómo estás?", "example_hanzi": "我很好。", "example_pinyin": "Wǒ hěn hǎo.", "example_es": "Estoy muy bien."}, {"id": "l5f-003", "hanzi": "我也很好。", "pinyin": "Wǒ yě hěn hǎo.", "meaning": "Yo también estoy bien.", "example_hanzi": "他们都很好。", "example_pinyin": "Tāmen dōu hěn hǎo.", "example_es": "Ellos están todos bien."}, {"id": "l5f-004", "hanzi": "你呢？", "pinyin": "Nǐ ne?", "meaning": "¿Y tú?", "example_hanzi": "我也很好。", "example_pinyin": "Wǒ yě hěn hǎo.", "example_es": "Yo también estoy bien."}, {"id": "l5f-005", "hanzi": "我是学生。", "pinyin": "Wǒ shì xuésheng.", "meaning": "Soy estudiante.", "example_hanzi": "他也是学生。", "example_pinyin": "Tā yě shì xuésheng.", "example_es": "Él también es estudiante."}, {"id": "l5f-006", "hanzi": "他是老师。", "pinyin": "Tā shì lǎoshī.", "meaning": "Él es profesor.", "example_hanzi": "她也是老师。", "example_pinyin": "Tā yě shì lǎoshī.", "example_es": "Ella también es profesora."}, {"id": "l5f-007", "hanzi": "她是中国人。", "pinyin": "Tā shì Zhōngguó rén.", "meaning": "Ella es china.", "example_hanzi": "他也是中国人。", "example_pinyin": "Tā yě shì Zhōngguó rén.", "example_es": "Él también es chino."}, {"id": "l5f-008", "hanzi": "你是哪国人？", "pinyin": "Nǐ shì nǎ guó rén?", "meaning": "¿De qué país eres?", "example_hanzi": "我是中国人。", "example_pinyin": "Wǒ shì Zhōngguó rén.", "example_es": "Soy chino/a."}, {"id": "l5f-009", "hanzi": "那是谁？", "pinyin": "Nà shì shéi?", "meaning": "¿Quién es ese/a?", "example_hanzi": "那是我妈妈。", "example_pinyin": "Nà shì wǒ māma.", "example_es": "Esa es mi mamá."}, {"id": "l5f-010", "hanzi": "这是我爸爸。", "pinyin": "Zhè shì wǒ bàba.", "meaning": "Este es mi papá.", "example_hanzi": "那是我妈妈。", "example_pinyin": "Nà shì wǒ māma.", "example_es": "Esa es mi mamá."}, {"id": "l5f-011", "hanzi": "你爸爸好吗？", "pinyin": "Nǐ bàba hǎo ma?", "meaning": "¿Tu papá está bien?", "example_hanzi": "我爸爸很好。", "example_pinyin": "Wǒ bàba hěn hǎo.", "example_es": "Mi papá está muy bien."}, {"id": "l5f-012", "hanzi": "你妈妈忙吗？", "pinyin": "Nǐ māma máng ma?", "meaning": "¿Tu mamá está ocupada?", "example_hanzi": "她很忙。", "example_pinyin": "Tā hěn máng.", "example_es": "Ella está muy ocupada."}, {"id": "l5f-013", "hanzi": "他们都很好。", "pinyin": "Tāmen dōu hěn hǎo.", "meaning": "Ellos están todos bien.", "example_hanzi": "我们都很好。", "example_pinyin": "Wǒmen dōu hěn hǎo.", "example_es": "Nosotros estamos todos bien."}, {"id": "l5f-014", "hanzi": "我们都喝咖啡。", "pinyin": "Wǒmen dōu hē kāfēi.", "meaning": "Todos nosotros tomamos café.", "example_hanzi": "他们也喝咖啡。", "example_pinyin": "Tāmen yě hē kāfēi.", "example_es": "Ellos también toman café."}, {"id": "l5f-015", "hanzi": "我要咖啡。", "pinyin": "Wǒ yào kāfēi.", "meaning": "Quiero café.", "example_hanzi": "我也要咖啡。", "example_pinyin": "Wǒ yě yào kāfēi.", "example_es": "Yo también quiero café."}, {"id": "l5f-016", "hanzi": "你要咖啡吗？", "pinyin": "Nǐ yào kāfēi ma?", "meaning": "¿Quieres café?", "example_hanzi": "我要。", "example_pinyin": "Wǒ yào.", "example_es": "Quiero."}, {"id": "l5f-017", "hanzi": "我有五本书。", "pinyin": "Wǒ yǒu wǔ běn shū.", "meaning": "Tengo cinco libros.", "example_hanzi": "他有六本书。", "example_pinyin": "Tā yǒu liù běn shū.", "example_es": "Él tiene seis libros."}, {"id": "l5f-018", "hanzi": "我有八个朋友。", "pinyin": "Wǒ yǒu bā ge péngyou.", "meaning": "Tengo ocho amigos.", "example_hanzi": "他有十个朋友。", "example_pinyin": "Tā yǒu shí ge péngyou.", "example_es": "Él tiene diez amigos."}, {"id": "l5f-019", "hanzi": "他是我的朋友。", "pinyin": "Tā shì wǒ de péngyou.", "meaning": "Él es mi amigo.", "example_hanzi": "她也是我的朋友。", "example_pinyin": "Tā yě shì wǒ de péngyou.", "example_es": "Ella también es mi amiga."}, {"id": "l5f-020", "hanzi": "你男朋友呢？", "pinyin": "Nǐ nán péngyou ne?", "meaning": "¿Y tu novio?", "example_hanzi": "他不在这儿。", "example_pinyin": "Tā bú zài zhèr.", "example_es": "Él no está aquí."}, {"id": "l5f-021", "hanzi": "哥哥，你好吗？", "pinyin": "Gēge, nǐ hǎo ma?", "meaning": "Hermano mayor, ¿cómo estás?", "example_hanzi": "哥哥很好。", "example_pinyin": "Gēge hěn hǎo.", "example_es": "El hermano mayor está muy bien."}, {"id": "l5f-022", "hanzi": "她在哪儿？", "pinyin": "Tā zài nǎr?", "meaning": "¿Dónde está ella?", "example_hanzi": "她在宿舍。", "example_pinyin": "Tā zài sùshè.", "example_es": "Ella está en la residencia."}, {"id": "l5f-023", "hanzi": "他不在。", "pinyin": "Tā bú zài.", "meaning": "Él no está.", "example_hanzi": "他在餐厅。", "example_pinyin": "Tā zài cāntīng.", "example_es": "Él está en el comedor."}, {"id": "l5f-024", "hanzi": "我们在这儿。", "pinyin": "Wǒmen zài zhèr.", "meaning": "Estamos aquí.", "example_hanzi": "老师也在这儿。", "example_pinyin": "Lǎoshī yě zài zhèr.", "example_es": "El profesor también está aquí."}, {"id": "l5f-025", "hanzi": "餐厅在哪儿？", "pinyin": "Cāntīng zài nǎr?", "meaning": "¿Dónde está el comedor?", "example_hanzi": "餐厅在二层。", "example_pinyin": "Cāntīng zài èr céng.", "example_es": "El comedor está en el segundo piso."}, {"id": "l5f-026", "hanzi": "宿舍在二层。", "pinyin": "Sùshè zài èr céng.", "meaning": "La residencia está en el segundo piso.", "example_hanzi": "餐厅也在二层。", "example_pinyin": "Cāntīng yě zài èr céng.", "example_es": "El comedor también está en el segundo piso."}, {"id": "l5f-027", "hanzi": "她在二零四号。", "pinyin": "Tā zài èr líng sì hào.", "meaning": "Ella está en la habitación 204.", "example_hanzi": "我在二零四号。", "example_pinyin": "Wǒ zài èr líng sì hào.", "example_es": "Estoy en la habitación 204."}, {"id": "l5f-028", "hanzi": "请坐。", "pinyin": "Qǐng zuò.", "meaning": "Siéntese, por favor.", "example_hanzi": "老师，请坐。", "example_pinyin": "Lǎoshī, qǐng zuò.", "example_es": "Profesor, siéntese, por favor."}, {"id": "l5f-029", "hanzi": "对不起。", "pinyin": "Duìbuqǐ.", "meaning": "Perdón.", "example_hanzi": "对不起，我来晚了。", "example_pinyin": "Duìbuqǐ, wǒ lái wǎn le.", "example_es": "Perdón, llegué tarde."}, {"id": "l5f-030", "hanzi": "我不知道。", "pinyin": "Wǒ bù zhīdào.", "meaning": "No sé.", "example_hanzi": "对不起，我不知道。", "example_pinyin": "Duìbuqǐ, wǒ bù zhīdào.", "example_es": "Perdón, no sé."}, {"id": "l5f-031", "hanzi": "没关系。", "pinyin": "Méi guānxi.", "meaning": "No importa.", "example_hanzi": "对不起。没关系。", "example_pinyin": "Duìbuqǐ. Méi guānxi.", "example_es": "Perdón. No importa."}, {"id": "l5f-032", "hanzi": "谢谢。", "pinyin": "Xièxie.", "meaning": "Gracias.", "example_hanzi": "谢谢老师。", "example_pinyin": "Xièxie lǎoshī.", "example_es": "Gracias, profesor."}, {"id": "l5f-033", "hanzi": "不用谢。", "pinyin": "Búyòng xiè.", "meaning": "De nada.", "example_hanzi": "谢谢。 不用谢。", "example_pinyin": "Xièxie. Búyòng xiè.", "example_es": "Gracias. De nada."}, {"id": "l5f-034", "hanzi": "好，再见。", "pinyin": "Hǎo, zàijiàn.", "meaning": "Bueno, adiós.", "example_hanzi": "老师，再见。", "example_pinyin": "Lǎoshī, zàijiàn.", "example_es": "Adiós, profesor."}, {"id": "l5f-035", "hanzi": "小姐，请问，她在哪儿？", "pinyin": "Xiǎojiě, qǐngwèn, tā zài nǎr?", "meaning": "Señorita, disculpe, ¿dónde está ella?", "example_hanzi": "她在餐厅。", "example_pinyin": "Tā zài cāntīng.", "example_es": "Ella está en el comedor."}, {"id": "l5f-036", "hanzi": "小姐，请问，餐厅在哪儿？", "pinyin": "Xiǎojiě, qǐngwèn, cāntīng zài nǎr?", "meaning": "Señorita, disculpe, ¿dónde está el comedor?", "example_hanzi": "餐厅在二层。", "example_pinyin": "Cāntīng zài èr céng.", "example_es": "El comedor está en el segundo piso."}, {"id": "l5f-037", "hanzi": "你的中文很好。", "pinyin": "Nǐ de Zhōngwén hěn hǎo.", "meaning": "Tu chino es muy bueno.", "example_hanzi": "老师的中文也很好。", "example_pinyin": "Lǎoshī de Zhōngwén yě hěn hǎo.", "example_es": "El chino del profesor también es muy bueno."}, {"id": "l5f-038", "hanzi": "她是老师，而且是中国人。", "pinyin": "Tā shì lǎoshī, érqiě shì Zhōngguó rén.", "meaning": "Ella es profesora y además es china.", "example_hanzi": "他是老师，而且很好。", "example_pinyin": "Tā shì lǎoshī, érqiě hěn hǎo.", "example_es": "Él es profesor y además es muy bueno."}, {"id": "l5f-039", "hanzi": "我来晚了。", "pinyin": "Wǒ lái wǎn le.", "meaning": "Llegué tarde.", "example_hanzi": "对不起，我来晚了。", "example_pinyin": "Duìbuqǐ, wǒ lái wǎn le.", "example_es": "Perdón, llegué tarde."}, {"id": "l5f-040", "hanzi": "他来了吗？", "pinyin": "Tā lái le ma?", "meaning": "¿Él vino?", "example_hanzi": "他来了。", "example_pinyin": "Tā lái le.", "example_es": "Él vino."}, {"id": "l5f-041", "hanzi": "我们都来了。", "pinyin": "Wǒmen dōu lái le.", "meaning": "Todos nosotros vinimos.", "example_hanzi": "他们也来了。", "example_pinyin": "Tāmen yě lái le.", "example_es": "Ellos también vinieron."}, {"id": "l5f-042", "hanzi": "四个人都来了。", "pinyin": "Sì ge rén dōu lái le.", "meaning": "Las cuatro personas vinieron.", "example_hanzi": "五个人也来了。", "example_pinyin": "Wǔ ge rén yě lái le.", "example_es": "También vinieron cinco personas."}, {"id": "l5f-043", "hanzi": "二个人在餐厅。", "pinyin": "Èr ge rén zài cāntīng.", "meaning": "Dos personas están en el comedor.", "example_hanzi": "一个人在宿舍。", "example_pinyin": "Yí ge rén zài sùshè.", "example_es": "Una persona está en la residencia."}, {"id": "l5f-044", "hanzi": "老师在这儿吗？", "pinyin": "Lǎoshī zài zhèr ma?", "meaning": "¿El profesor está aquí?", "example_hanzi": "老师不在这儿。", "example_pinyin": "Lǎoshī bú zài zhèr.", "example_es": "El profesor no está aquí."}, {"id": "l5f-045", "hanzi": "我朋友在宿舍。", "pinyin": "Wǒ péngyou zài sùshè.", "meaning": "Mi amigo está en la residencia.", "example_hanzi": "他不在餐厅。", "example_pinyin": "Tā bú zài cāntīng.", "example_es": "Él no está en el comedor."}, {"id": "l5f-046", "hanzi": "爸爸妈妈都很好。", "pinyin": "Bàba māma dōu hěn hǎo.", "meaning": "Papá y mamá están muy bien.", "example_hanzi": "他们都不忙。", "example_pinyin": "Tāmen dōu bù máng.", "example_es": "Ellos no están ocupados."}, {"id": "l5f-047", "hanzi": "他有一个儿子。", "pinyin": "Tā yǒu yī gè érzi.", "meaning": "Él tiene un hijo.", "example_hanzi": "儿子很好。", "example_pinyin": "Érzi hěn hǎo.", "example_es": "El hijo está muy bien."}, {"id": "l5f-048", "hanzi": "请问，你知道吗？", "pinyin": "Qǐngwèn, nǐ zhīdào ma?", "meaning": "Disculpe, ¿usted sabe?", "example_hanzi": "对不起，我不知道。", "example_pinyin": "Duìbuqǐ, wǒ bù zhīdào.", "example_es": "Perdón, no sé."}, {"id": "l5f-049", "hanzi": "我们老师是中国人。", "pinyin": "Wǒmen lǎoshī shì Zhōngguó rén.", "meaning": "Nuestro profesor es chino.", "example_hanzi": "我们老师很好。", "example_pinyin": "Wǒmen lǎoshī hěn hǎo.", "example_es": "Nuestro profesor es muy bueno."}, {"id": "l5f-050", "hanzi": "好，谢谢，再见。", "pinyin": "Hǎo, xièxie, zàijiàn.", "meaning": "Bueno, gracias, adiós.", "example_hanzi": "不用谢，再见。", "example_pinyin": "Búyòng xiè, zàijiàn.", "example_es": "De nada, adiós."}]}, {"id": "leccion-6-frases", "title": "Lección 6 - Frases", "description": "50 frases cortas usando vocabulario de las lecciones 1 a 6", "items": [{"id": "l6f-001", "hanzi": "你好。", "pinyin": "Nǐ hǎo.", "meaning": "Hola.", "example_hanzi": "你很好。", "example_pinyin": "Nǐ hěn hǎo.", "example_es": "Tú estás muy bien."}, {"id": "l6f-002", "hanzi": "你好吗？", "pinyin": "Nǐ hǎo ma?", "meaning": "¿Cómo estás?", "example_hanzi": "我很好。", "example_pinyin": "Wǒ hěn hǎo.", "example_es": "Estoy muy bien."}, {"id": "l6f-003", "hanzi": "我很好。", "pinyin": "Wǒ hěn hǎo.", "meaning": "Estoy muy bien.", "example_hanzi": "你呢？", "example_pinyin": "Nǐ ne?", "example_es": "¿Y tú?"}, {"id": "l6f-004", "hanzi": "你呢？", "pinyin": "Nǐ ne?", "meaning": "¿Y tú?", "example_hanzi": "我也很好。", "example_pinyin": "Wǒ yě hěn hǎo.", "example_es": "Yo también estoy bien."}, {"id": "l6f-005", "hanzi": "我也是中国人。", "pinyin": "Wǒ yě shì Zhōngguó rén.", "meaning": "Yo también soy chino/a.", "example_hanzi": "他也是中国人。", "example_pinyin": "Tā yě shì Zhōngguó rén.", "example_es": "Él también es chino."}, {"id": "l6f-006", "hanzi": "我是老师。", "pinyin": "Wǒ shì lǎoshī.", "meaning": "Soy profesor/a.", "example_hanzi": "他不是老师。", "example_pinyin": "Tā bú shì lǎoshī.", "example_es": "Él no es profesor."}, {"id": "l6f-007", "hanzi": "他是老师吗？", "pinyin": "Tā shì lǎoshī ma?", "meaning": "¿Él es profesor?", "example_hanzi": "他是中国老师。", "example_pinyin": "Tā shì Zhōngguó lǎoshī.", "example_es": "Él es un profesor chino."}, {"id": "l6f-008", "hanzi": "她是哪国人？", "pinyin": "Tā shì nǎ guó rén?", "meaning": "¿De qué país es ella?", "example_hanzi": "她是中国人。", "example_pinyin": "Tā shì Zhōngguó rén.", "example_es": "Ella es china."}, {"id": "l6f-009", "hanzi": "那是谁？", "pinyin": "Nà shì shéi?", "meaning": "¿Quién es ese/a?", "example_hanzi": "那是我们老师。", "example_pinyin": "Nà shì wǒmen lǎoshī.", "example_es": "Ese es nuestro profesor."}, {"id": "l6f-010", "hanzi": "这是我妈妈。", "pinyin": "Zhè shì wǒ māma.", "meaning": "Esta es mi mamá.", "example_hanzi": "这是我爸爸。", "example_pinyin": "Zhè shì wǒ bàba.", "example_es": "Este es mi papá."}, {"id": "l6f-011", "hanzi": "你爸爸好吗？", "pinyin": "Nǐ bàba hǎo ma?", "meaning": "¿Tu papá está bien?", "example_hanzi": "我爸爸很好。", "example_pinyin": "Wǒ bàba hěn hǎo.", "example_es": "Mi papá está muy bien."}, {"id": "l6f-012", "hanzi": "你妈妈忙吗？", "pinyin": "Nǐ māma máng ma?", "meaning": "¿Tu mamá está ocupada?", "example_hanzi": "她很忙。", "example_pinyin": "Tā hěn máng.", "example_es": "Ella está muy ocupada."}, {"id": "l6f-013", "hanzi": "他们都很好。", "pinyin": "Tāmen dōu hěn hǎo.", "meaning": "Ellos están todos bien.", "example_hanzi": "我们都很好。", "example_pinyin": "Wǒmen dōu hěn hǎo.", "example_es": "Nosotros estamos todos bien."}, {"id": "l6f-014", "hanzi": "我有五本书。", "pinyin": "Wǒ yǒu wǔ běn shū.", "meaning": "Tengo cinco libros.", "example_hanzi": "我有六本书。", "example_pinyin": "Wǒ yǒu liù běn shū.", "example_es": "Tengo seis libros."}, {"id": "l6f-015", "hanzi": "我有八个朋友。", "pinyin": "Wǒ yǒu bā ge péngyou.", "meaning": "Tengo ocho amigos.", "example_hanzi": "他有十个朋友。", "example_pinyin": "Tā yǒu shí ge péngyou.", "example_es": "Él tiene diez amigos."}, {"id": "l6f-016", "hanzi": "他是我的朋友。", "pinyin": "Tā shì wǒ de péngyou.", "meaning": "Él es mi amigo.", "example_hanzi": "她也是我的朋友。", "example_pinyin": "Tā yě shì wǒ de péngyou.", "example_es": "Ella también es mi amiga."}, {"id": "l6f-017", "hanzi": "你男朋友呢？", "pinyin": "Nǐ nán péngyou ne?", "meaning": "¿Y tu novio?", "example_hanzi": "我没有男朋友。", "example_pinyin": "Wǒ méiyǒu nán péngyou.", "example_es": "No tengo novio."}, {"id": "l6f-018", "hanzi": "哥哥，你好吗？", "pinyin": "Gēge, nǐ hǎo ma?", "meaning": "Hermano mayor, ¿cómo estás?", "example_hanzi": "哥哥很好。", "example_pinyin": "Gēge hěn hǎo.", "example_es": "El hermano mayor está muy bien."}, {"id": "l6f-019", "hanzi": "我要咖啡。", "pinyin": "Wǒ yào kāfēi.", "meaning": "Quiero café.", "example_hanzi": "我也要咖啡。", "example_pinyin": "Wǒ yě yào kāfēi.", "example_es": "Yo también quiero café."}, {"id": "l6f-020", "hanzi": "你要咖啡吗？", "pinyin": "Nǐ yào kāfēi ma?", "meaning": "¿Quieres café?", "example_hanzi": "我要。", "example_pinyin": "Wǒ yào.", "example_es": "Quiero."}, {"id": "l6f-021", "hanzi": "我们都喝咖啡。", "pinyin": "Wǒmen dōu hē kāfēi.", "meaning": "Todos nosotros tomamos café.", "example_hanzi": "他们也喝咖啡。", "example_pinyin": "Tāmen yě hē kāfēi.", "example_es": "Ellos también toman café."}, {"id": "l6f-022", "hanzi": "中国很大。", "pinyin": "Zhōngguó hěn dà.", "meaning": "China es muy grande.", "example_hanzi": "中国是一个大国。", "example_pinyin": "Zhōngguó shì yí ge dà guó.", "example_es": "China es un gran país."}, {"id": "l6f-023", "hanzi": "中国老师很好。", "pinyin": "Zhōngguó lǎoshī hěn hǎo.", "meaning": "El profesor chino es muy bueno.", "example_hanzi": "我们老师是中国人。", "example_pinyin": "Wǒmen lǎoshī shì Zhōngguó rén.", "example_es": "Nuestro profesor es chino."}, {"id": "l6f-024", "hanzi": "您好吗？", "pinyin": "Nín hǎo ma?", "meaning": "¿Cómo está usted?", "example_hanzi": "老师，您好！", "example_pinyin": "Lǎoshī, nín hǎo!", "example_es": "¡Hola, profesor!"}, {"id": "l6f-025", "hanzi": "今天天气很好。", "pinyin": "Jīntiān tiānqì hěn hǎo.", "meaning": "Hoy el clima está muy bueno.", "example_hanzi": "今天很好。", "example_pinyin": "Jīntiān hěn hǎo.", "example_es": "Hoy está muy bien."}, {"id": "l6f-026", "hanzi": "明天您有时间吗？", "pinyin": "Míngtiān nín yǒu shíjiān ma?", "meaning": "¿Mañana tiene tiempo?", "example_hanzi": "我明天有时间。", "example_pinyin": "Wǒ míngtiān yǒu shíjiān.", "example_es": "Mañana tengo tiempo."}, {"id": "l6f-027", "hanzi": "现在去，可以吗？", "pinyin": "Xiànzài qù, kěyǐ ma?", "meaning": "¿Podemos ir ahora?", "example_hanzi": "现在不行。", "example_pinyin": "Xiànzài bù xíng.", "example_es": "Ahora no se puede."}, {"id": "l6f-028", "hanzi": "我们去游泳，好吗？", "pinyin": "Wǒmen qù yóuyǒng, hǎo ma?", "meaning": "¿Vamos a nadar?", "example_hanzi": "明天去游泳。", "example_pinyin": "Míngtiān qù yóuyǒng.", "example_es": "Mañana vamos a nadar."}, {"id": "l6f-029", "hanzi": "我们去打球，好吗？", "pinyin": "Wǒmen qù dǎ qiú, hǎo ma?", "meaning": "¿Vamos a jugar a la pelota?", "example_hanzi": "现在去打球。", "example_pinyin": "Xiànzài qù dǎ qiú.", "example_es": "Ahora vamos a jugar a la pelota."}, {"id": "l6f-030", "hanzi": "什么时候去？", "pinyin": "Shénme shíhou qù?", "meaning": "¿Cuándo vamos?", "example_hanzi": "明天去。", "example_pinyin": "Míngtiān qù.", "example_es": "Vamos mañana."}, {"id": "l6f-031", "hanzi": "昨天的京剧怎么样？", "pinyin": "Zuótiān de jīngjù zěnmeyàng?", "meaning": "¿Qué te pareció la Ópera de Pekín de ayer?", "example_hanzi": "很有意思。", "example_pinyin": "Hěn yǒu yìsi.", "example_es": "Muy interesante."}, {"id": "l6f-032", "hanzi": "昨天的京剧很有意思。", "pinyin": "Zuótiān de jīngjù hěn yǒu yìsi.", "meaning": "La Ópera de Pekín de ayer fue muy interesante.", "example_hanzi": "今天的京剧也很有意思。", "example_pinyin": "Jīntiān de jīngjù yě hěn yǒu yìsi.", "example_es": "La Ópera de Pekín de hoy también es muy interesante."}, {"id": "l6f-033", "hanzi": "请再说一遍。", "pinyin": "Qǐng zài shuō yí biàn.", "meaning": "Por favor, dilo otra vez.", "example_hanzi": "请说一遍。", "example_pinyin": "Qǐng shuō yí biàn.", "example_es": "Por favor, dilo una vez."}, {"id": "l6f-034", "hanzi": "你说什么？", "pinyin": "Nǐ shuō shénme?", "meaning": "¿Qué dices?", "example_hanzi": "我不知道你说什么。", "example_pinyin": "Wǒ bù zhīdào nǐ shuō shénme.", "example_es": "No sé qué dices."}, {"id": "l6f-035", "hanzi": "什么意思？", "pinyin": "Shénme yìsi?", "meaning": "¿Qué significa?", "example_hanzi": "这个什么意思？", "example_pinyin": "Zhège shénme yìsi?", "example_es": "¿Qué significa esto?"}, {"id": "l6f-036", "hanzi": "谢谢。", "pinyin": "Xièxie.", "meaning": "Gracias.", "example_hanzi": "老师，谢谢。", "example_pinyin": "Lǎoshī, xièxie.", "example_es": "Gracias, profesor."}, {"id": "l6f-037", "hanzi": "对不起。", "pinyin": "Duìbuqǐ.", "meaning": "Perdón.", "example_hanzi": "对不起，我很忙。", "example_pinyin": "Duìbuqǐ, wǒ hěn máng.", "example_es": "Perdón, estoy muy ocupado."}, {"id": "l6f-038", "hanzi": "抱歉，我很忙。", "pinyin": "Bàoqiàn, wǒ hěn máng.", "meaning": "Lo siento, estoy muy ocupado.", "example_hanzi": "明天我很忙。", "example_pinyin": "Míngtiān wǒ hěn máng.", "example_es": "Mañana estaré muy ocupado."}, {"id": "l6f-039", "hanzi": "恐怕不行。", "pinyin": "Kǒngpà bù xíng.", "meaning": "Me temo que no va a ser posible.", "example_hanzi": "现在恐怕不行。", "example_pinyin": "Xiànzài kǒngpà bù xíng.", "example_es": "Ahora me temo que no se puede."}, {"id": "l6f-040", "hanzi": "太好了！", "pinyin": "Tài hǎo le!", "meaning": "¡Buenísimo!", "example_hanzi": "今天天气太好了！", "example_pinyin": "Jīntiān tiānqì tài hǎo le!", "example_es": "¡Hoy el clima está buenísimo!"}, {"id": "l6f-041", "hanzi": "我不忙。", "pinyin": "Wǒ bù máng.", "meaning": "No estoy ocupado.", "example_hanzi": "今天我不忙。", "example_pinyin": "Jīntiān wǒ bù máng.", "example_es": "Hoy no estoy ocupado."}, {"id": "l6f-042", "hanzi": "他很忙。", "pinyin": "Tā hěn máng.", "meaning": "Él está muy ocupado.", "example_hanzi": "他今天很忙。", "example_pinyin": "Tā jīntiān hěn máng.", "example_es": "Hoy él está muy ocupado."}, {"id": "l6f-043", "hanzi": "我们老师都很好。", "pinyin": "Wǒmen lǎoshī dōu hěn hǎo.", "meaning": "Nuestros profesores son todos muy buenos.", "example_hanzi": "中国老师都很好。", "example_pinyin": "Zhōngguó lǎoshī dōu hěn hǎo.", "example_es": "Los profesores chinos son todos muy buenos."}, {"id": "l6f-044", "hanzi": "我也有时间。", "pinyin": "Wǒ yě yǒu shíjiān.", "meaning": "Yo también tengo tiempo.", "example_hanzi": "明天我也有时间。", "example_pinyin": "Míngtiān wǒ yě yǒu shíjiān.", "example_es": "Mañana yo también tengo tiempo."}, {"id": "l6f-045", "hanzi": "你现在忙吗？", "pinyin": "Nǐ xiànzài máng ma?", "meaning": "¿Ahora estás ocupado?", "example_hanzi": "我现在不忙。", "example_pinyin": "Wǒ xiànzài bù máng.", "example_es": "Ahora no estoy ocupado."}, {"id": "l6f-046", "hanzi": "明天去中国吗？", "pinyin": "Míngtiān qù Zhōngguó ma?", "meaning": "¿Mañana vas a China?", "example_hanzi": "我明天不去中国。", "example_pinyin": "Wǒ míngtiān bú qù Zhōngguó.", "example_es": "Mañana no voy a China."}, {"id": "l6f-047", "hanzi": "今天去学校吗？", "pinyin": "Jīntiān qù xuéxiào ma?", "meaning": "¿Hoy vas a la escuela?", "example_hanzi": "我今天去学校。", "example_pinyin": "Wǒ jīntiān qù xuéxiào.", "example_es": "Hoy voy a la escuela."}, {"id": "l6f-048", "hanzi": "今天我喝咖啡。", "pinyin": "Jīntiān wǒ hē kāfēi.", "meaning": "Hoy tomo café.", "example_hanzi": "明天我也喝咖啡。", "example_pinyin": "Míngtiān wǒ yě hē kāfēi.", "example_es": "Mañana yo también tomo café."}, {"id": "l6f-049", "hanzi": "五个人都来了。", "pinyin": "Wǔ ge rén dōu lái le.", "meaning": "Las cinco personas vinieron.", "example_hanzi": "八个人也来了。", "example_pinyin": "Bā ge rén yě lái le.", "example_es": "También vinieron ocho personas."}, {"id": "l6f-050", "hanzi": "老师，请再说一遍。", "pinyin": "Lǎoshī, qǐng zài shuō yí biàn.", "meaning": "Profesor, por favor, dígalo otra vez.", "example_hanzi": "老师，谢谢。", "example_pinyin": "Lǎoshī, xièxie.", "example_es": "Gracias, profesor."}]}, {"id": "leccion-7-frases", "title": "Lección 7 - Frases", "description": "50 frases cortas usando vocabulario de las lecciones 1 a 7", "items": [{"id": "l7f-001", "hanzi": "明天开学。", "pinyin": "Míngtiān kāixué.", "meaning": "Mañana empiezan las clases.", "example_hanzi": "我们明天开学。", "example_pinyin": "Wǒmen míngtiān kāixué.", "example_es": "Nosotros empezamos las clases mañana."}, {"id": "l7f-002", "hanzi": "我很高兴。", "pinyin": "Wǒ hěn gāoxìng.", "meaning": "Estoy muy contento/a.", "example_hanzi": "今天我很高兴。", "example_pinyin": "Jīntiān wǒ hěn gāoxìng.", "example_es": "Hoy estoy muy contento/a."}, {"id": "l7f-003", "hanzi": "你很高兴吗？", "pinyin": "Nǐ hěn gāoxìng ma?", "meaning": "¿Estás muy contento/a?", "example_hanzi": "我也很高兴。", "example_pinyin": "Wǒ yě hěn gāoxìng.", "example_es": "Yo también estoy muy contento/a."}, {"id": "l7f-004", "hanzi": "你看！", "pinyin": "Nǐ kàn!", "meaning": "¡Mira!", "example_hanzi": "你看，他来了。", "example_pinyin": "Nǐ kàn, tā lái le.", "example_es": "Mira, él vino."}, {"id": "l7f-005", "hanzi": "我看老师。", "pinyin": "Wǒ kàn lǎoshī.", "meaning": "Yo miro al profesor.", "example_hanzi": "你看老师吗？", "example_pinyin": "Nǐ kàn lǎoshī ma?", "example_es": "¿Miras al profesor?"}, {"id": "l7f-006", "hanzi": "我问老师。", "pinyin": "Wǒ wèn lǎoshī.", "meaning": "Yo le pregunto al profesor.", "example_hanzi": "我问老师一下。", "example_pinyin": "Wǒ wèn lǎoshī yíxià.", "example_es": "Le pregunto un momento al profesor."}, {"id": "l7f-007", "hanzi": "请问，您是老师吗？", "pinyin": "Qǐngwèn, nín shì lǎoshī ma?", "meaning": "Disculpe, ¿usted es profesor?", "example_hanzi": "是，我是老师。", "example_pinyin": "Shì, wǒ shì lǎoshī.", "example_es": "Sí, soy profesor."}, {"id": "l7f-008", "hanzi": "请问，您忙吗？", "pinyin": "Qǐngwèn, nín máng ma?", "meaning": "Disculpe, ¿está ocupado/a?", "example_hanzi": "我不忙。", "example_pinyin": "Wǒ bù máng.", "example_es": "No estoy ocupado/a."}, {"id": "l7f-009", "hanzi": "我问一下。", "pinyin": "Wǒ wèn yíxià.", "meaning": "Voy a preguntar un momento.", "example_hanzi": "请问，我问一下。", "example_pinyin": "Qǐngwèn, wǒ wèn yíxià.", "example_es": "Disculpe, voy a preguntar un momento."}, {"id": "l7f-010", "hanzi": "我们学院很好。", "pinyin": "Wǒmen xuéyuàn hěn hǎo.", "meaning": "Nuestro instituto es muy bueno.", "example_hanzi": "他们学院也很好。", "example_pinyin": "Tāmen xuéyuàn yě hěn hǎo.", "example_es": "Su instituto también es muy bueno."}, {"id": "l7f-011", "hanzi": "他是我们学院的老师。", "pinyin": "Tā shì wǒmen xuéyuàn de lǎoshī.", "meaning": "Él es profesor de nuestro instituto.", "example_hanzi": "她也是我们学院的老师。", "example_pinyin": "Tā yě shì wǒmen xuéyuàn de lǎoshī.", "example_es": "Ella también es profesora de nuestro instituto."}, {"id": "l7f-012", "hanzi": "这是我的名片。", "pinyin": "Zhè shì wǒ de míngpiàn.", "meaning": "Esta es mi tarjeta.", "example_hanzi": "这是老师的名片。", "example_pinyin": "Zhè shì lǎoshī de míngpiàn.", "example_es": "Esta es la tarjeta del profesor."}, {"id": "l7f-013", "hanzi": "谢谢你的名片。", "pinyin": "Xièxie nǐ de míngpiàn.", "meaning": "Gracias por tu tarjeta.", "example_hanzi": "谢谢老师的名片。", "example_pinyin": "Xièxie lǎoshī de míngpiàn.", "example_es": "Gracias por la tarjeta del profesor."}, {"id": "l7f-014", "hanzi": "啊，你是老师！", "pinyin": "A, nǐ shì lǎoshī!", "meaning": "¡Ah, eres profesor!", "example_hanzi": "啊，您是教授！", "example_pinyin": "A, nín shì jiàoshòu!", "example_es": "¡Ah, usted es profesor universitario!"}, {"id": "l7f-015", "hanzi": "他是教授。", "pinyin": "Tā shì jiàoshòu.", "meaning": "Él es profesor universitario.", "example_hanzi": "她也是教授。", "example_pinyin": "Tā yě shì jiàoshòu.", "example_es": "Ella también es profesora universitaria."}, {"id": "l7f-016", "hanzi": "您是教授吗？", "pinyin": "Nín shì jiàoshòu ma?", "meaning": "¿Usted es profesor universitario?", "example_hanzi": "是，我是教授。", "example_pinyin": "Shì, wǒ shì jiàoshòu.", "example_es": "Sí, soy profesor universitario."}, {"id": "l7f-017", "hanzi": "那是谁？", "pinyin": "Nà shì shéi?", "meaning": "¿Quién es ese/a?", "example_hanzi": "那是我的朋友。", "example_pinyin": "Nà shì wǒ de péngyou.", "example_es": "Ese es mi amigo."}, {"id": "l7f-018", "hanzi": "你认识他吗？", "pinyin": "Nǐ rènshi tā ma?", "meaning": "¿Lo conoces?", "example_hanzi": "我不认识他。", "example_pinyin": "Wǒ bù rènshi tā.", "example_es": "No lo conozco."}, {"id": "l7f-019", "hanzi": "我不认识她。", "pinyin": "Wǒ bù rènshi tā.", "meaning": "No la conozco.", "example_hanzi": "你认识她吗？", "example_pinyin": "Nǐ rènshi tā ma?", "example_es": "¿La conoces?"}, {"id": "l7f-020", "hanzi": "我们认识一下。", "pinyin": "Wǒmen rènshi yíxià.", "meaning": "Conozcámonos un momento.", "example_hanzi": "老师，我们认识一下吧。", "example_pinyin": "Lǎoshī, wǒmen rènshi yíxià ba.", "example_es": "Profesor, conozcámonos un momento."}, {"id": "l7f-021", "hanzi": "我来介绍一下。", "pinyin": "Wǒ lái jièshào yíxià.", "meaning": "Voy a presentar un momento.", "example_hanzi": "我来介绍我的朋友。", "example_pinyin": "Wǒ lái jièshào wǒ de péngyou.", "example_es": "Voy a presentar a mi amigo."}, {"id": "l7f-022", "hanzi": "这是我的朋友。", "pinyin": "Zhè shì wǒ de péngyou.", "meaning": "Este es mi amigo.", "example_hanzi": "这是我的老师。", "example_pinyin": "Zhè shì wǒ de lǎoshī.", "example_es": "Este es mi profesor."}, {"id": "l7f-023", "hanzi": "请问，你叫什么名字？", "pinyin": "Qǐngwèn, nǐ jiào shénme míngzi?", "meaning": "Disculpa, ¿cómo te llamas?", "example_hanzi": "我叫王明。", "example_pinyin": "Wǒ jiào Wáng Míng.", "example_es": "Me llamo Wang Ming."}, {"id": "l7f-024", "hanzi": "你的名字很好。", "pinyin": "Nǐ de míngzi hěn hǎo.", "meaning": "Tu nombre es muy bueno/lindo.", "example_hanzi": "他的名字也很好。", "example_pinyin": "Tā de míngzi yě hěn hǎo.", "example_es": "Su nombre también es muy bueno/lindo."}, {"id": "l7f-025", "hanzi": "这是中文名字吗？", "pinyin": "Zhè shì Zhōngwén míngzi ma?", "meaning": "¿Este es un nombre chino?", "example_hanzi": "这是我的中文名字。", "example_pinyin": "Zhè shì wǒ de Zhōngwén míngzi.", "example_es": "Este es mi nombre chino."}, {"id": "l7f-026", "hanzi": "我的中文名字很好记。", "pinyin": "Wǒ de Zhōngwén míngzi hěn hǎo jì.", "meaning": "Mi nombre chino es fácil de recordar.", "example_hanzi": "你的中文名字也很好记。", "example_pinyin": "Nǐ de Zhōngwén míngzi yě hěn hǎo jì.", "example_es": "Tu nombre chino también es fácil de recordar."}, {"id": "l7f-027", "hanzi": "你学习中文吗？", "pinyin": "Nǐ xuéxí Zhōngwén ma?", "meaning": "¿Estudias chino?", "example_hanzi": "我学习中文。", "example_pinyin": "Wǒ xuéxí Zhōngwén.", "example_es": "Yo estudio chino."}, {"id": "l7f-028", "hanzi": "我学习中文。", "pinyin": "Wǒ xuéxí Zhōngwén.", "meaning": "Estudio chino.", "example_hanzi": "我们都学习中文。", "example_pinyin": "Wǒmen dōu xuéxí Zhōngwén.", "example_es": "Todos nosotros estudiamos chino."}, {"id": "l7f-029", "hanzi": "他也学习中文。", "pinyin": "Tā yě xuéxí Zhōngwén.", "meaning": "Él también estudia chino.", "example_hanzi": "她也学习中文。", "example_pinyin": "Tā yě xuéxí Zhōngwén.", "example_es": "Ella también estudia chino."}, {"id": "l7f-030", "hanzi": "你学习什么专业？", "pinyin": "Nǐ xuéxí shénme zhuānyè?", "meaning": "¿Qué carrera estudias?", "example_hanzi": "我学习文学专业。", "example_pinyin": "Wǒ xuéxí wénxué zhuānyè.", "example_es": "Estudio la carrera de literatura."}, {"id": "l7f-031", "hanzi": "我学习美术专业。", "pinyin": "Wǒ xuéxí měishù zhuānyè.", "meaning": "Estudio la carrera de bellas artes.", "example_hanzi": "他也学习美术专业。", "example_pinyin": "Tā yě xuéxí měishù zhuānyè.", "example_es": "Él también estudia bellas artes."}, {"id": "l7f-032", "hanzi": "她学习文学专业。", "pinyin": "Tā xuéxí wénxué zhuānyè.", "meaning": "Ella estudia literatura.", "example_hanzi": "我不学习文学专业。", "example_pinyin": "Wǒ bù xuéxí wénxué zhuānyè.", "example_es": "Yo no estudio literatura."}, {"id": "l7f-033", "hanzi": "我们都是中文系的学生。", "pinyin": "Wǒmen dōu shì Zhōngwén xì de xuésheng.", "meaning": "Todos somos estudiantes del departamento de chino.", "example_hanzi": "他们也是中文系的学生。", "example_pinyin": "Tāmen yě shì Zhōngwén xì de xuésheng.", "example_es": "Ellos también son estudiantes del departamento de chino."}, {"id": "l7f-034", "hanzi": "她是文学系的学生。", "pinyin": "Tā shì wénxué xì de xuésheng.", "meaning": "Ella es estudiante del departamento de literatura.", "example_hanzi": "他是中文系的学生。", "example_pinyin": "Tā shì Zhōngwén xì de xuésheng.", "example_es": "Él es estudiante del departamento de chino."}, {"id": "l7f-035", "hanzi": "你爸爸是老师吗？", "pinyin": "Nǐ bàba shì lǎoshī ma?", "meaning": "¿Tu papá es profesor?", "example_hanzi": "我爸爸不是老师。", "example_pinyin": "Wǒ bàba bú shì lǎoshī.", "example_es": "Mi papá no es profesor."}, {"id": "l7f-036", "hanzi": "我爸爸很忙。", "pinyin": "Wǒ bàba hěn máng.", "meaning": "Mi papá está muy ocupado.", "example_hanzi": "今天我爸爸很忙。", "example_pinyin": "Jīntiān wǒ bàba hěn máng.", "example_es": "Hoy mi papá está muy ocupado."}, {"id": "l7f-037", "hanzi": "他是美国人吗？", "pinyin": "Tā shì Měiguó rén ma?", "meaning": "¿Él es estadounidense?", "example_hanzi": "不是，他是加拿大人。", "example_pinyin": "Bú shì, tā shì Jiānádà rén.", "example_es": "No, es canadiense."}, {"id": "l7f-038", "hanzi": "我是加拿大人。", "pinyin": "Wǒ shì Jiānádà rén.", "meaning": "Soy canadiense.", "example_hanzi": "他是美国人。", "example_pinyin": "Tā shì Měiguó rén.", "example_es": "Él es estadounidense."}, {"id": "l7f-039", "hanzi": "她不是美国人。", "pinyin": "Tā bú shì Měiguó rén.", "meaning": "Ella no es estadounidense.", "example_hanzi": "她是中国人。", "example_pinyin": "Tā shì Zhōngguó rén.", "example_es": "Ella es china."}, {"id": "l7f-040", "hanzi": "你看那个学生。", "pinyin": "Nǐ kàn nàge xuésheng.", "meaning": "Mira a ese estudiante.", "example_hanzi": "我不认识那个学生。", "example_pinyin": "Wǒ bù rènshi nàge xuésheng.", "example_es": "No conozco a ese estudiante."}, {"id": "l7f-041", "hanzi": "我看一下你的名片。", "pinyin": "Wǒ kàn yíxià nǐ de míngpiàn.", "meaning": "Voy a mirar tu tarjeta un momento.", "example_hanzi": "老师看一下我的名片。", "example_pinyin": "Lǎoshī kàn yíxià wǒ de míngpiàn.", "example_es": "El profesor mira mi tarjeta un momento."}, {"id": "l7f-042", "hanzi": "我问一下老师在哪儿。", "pinyin": "Wǒ wèn yíxià lǎoshī zài nǎr.", "meaning": "Voy a preguntar dónde está el profesor.", "example_hanzi": "请问，老师在哪儿？", "example_pinyin": "Qǐngwèn, lǎoshī zài nǎr?", "example_es": "Disculpe, ¿dónde está el profesor?"}, {"id": "l7f-043", "hanzi": "认识你，我很高兴。", "pinyin": "Rènshi nǐ, wǒ hěn gāoxìng.", "meaning": "Me alegra conocerte.", "example_hanzi": "认识你们，我也很高兴。", "example_pinyin": "Rènshi nǐmen, wǒ yě hěn gāoxìng.", "example_es": "Me alegra conocerlos a ustedes también."}, {"id": "l7f-044", "hanzi": "我们都很高兴。", "pinyin": "Wǒmen dōu hěn gāoxìng.", "meaning": "Todos estamos muy contentos.", "example_hanzi": "今天我们都很高兴。", "example_pinyin": "Jīntiān wǒmen dōu hěn gāoxìng.", "example_es": "Hoy todos estamos muy contentos."}, {"id": "l7f-045", "hanzi": "你来学校吗？", "pinyin": "Nǐ lái xuéxiào ma?", "meaning": "¿Vienes a la escuela?", "example_hanzi": "我明天来学校。", "example_pinyin": "Wǒ míngtiān lái xuéxiào.", "example_es": "Mañana vengo a la escuela."}, {"id": "l7f-046", "hanzi": "老师来了。", "pinyin": "Lǎoshī lái le.", "meaning": "El profesor vino/llegó.", "example_hanzi": "我们老师来了。", "example_pinyin": "Wǒmen lǎoshī lái le.", "example_es": "Nuestro profesor llegó."}, {"id": "l7f-047", "hanzi": "朋友来了，我很高兴。", "pinyin": "Péngyou lái le, wǒ hěn gāoxìng.", "meaning": "Mi amigo vino y estoy muy contento/a.", "example_hanzi": "她来了，我们都很高兴。", "example_pinyin": "Tā lái le, wǒmen dōu hěn gāoxìng.", "example_es": "Ella vino y todos estamos muy contentos."}, {"id": "l7f-048", "hanzi": "请坐，再见！", "pinyin": "Qǐng zuò, zàijiàn!", "meaning": "Siéntate, ¡adiós!", "example_hanzi": "老师，请坐。老师，再见！", "example_pinyin": "Lǎoshī, qǐng zuò. Lǎoshī, zàijiàn!", "example_es": "Profesor, siéntese. ¡Adiós, profesor!"}, {"id": "l7f-049", "hanzi": "谢谢，我们都很好。", "pinyin": "Xièxie, wǒmen dōu hěn hǎo.", "meaning": "Gracias, todos estamos bien.", "example_hanzi": "谢谢老师，我们都很好。", "example_pinyin": "Xièxie lǎoshī, wǒmen dōu hěn hǎo.", "example_es": "Gracias, profesor, todos estamos bien."}, {"id": "l7f-050", "hanzi": "好，再见，明天开学。", "pinyin": "Hǎo, zàijiàn, míngtiān kāixué.", "meaning": "Bueno, adiós, mañana empiezan las clases.", "example_hanzi": "好，明天见，明天开学。", "example_pinyin": "Hǎo, míngtiān jiàn, míngtiān kāixué.", "example_es": "Bueno, nos vemos mañana, mañana empiezan las clases."}]}];
+
+function stripEndingPunctuation(s){
+  return (s || '').replace(/[。！？!?.]+$/g, '').trim();
+}
+
+function makeDistractors(pool, currentItem, count=3){
+  const normalizedCurrent = stripEndingPunctuation(currentItem.hanzi);
+  const candidates = pool.filter(item => stripEndingPunctuation(item.hanzi) !== normalizedCurrent);
+  const shuffledPool = shuffle([...candidates]);
+  return shuffledPool.slice(0, count).map(item => ({
+    zh: stripEndingPunctuation(item.hanzi),
+    py: item.pinyin,
+    es: item.meaning
+  }));
+}
+
+function buildExercisesFromPhraseSet(setObj){
+  return setObj.items.map((item, idx) => {
+    const correctOption = {
+      zh: stripEndingPunctuation(item.hanzi),
+      py: item.pinyin,
+      es: item.meaning
+    };
+    const options = shuffle([correctOption, ...makeDistractors(setObj.items, item, 3)]);
+    const correctIndex = options.findIndex(opt => opt.zh === correctOption.zh && opt.py === correctOption.py);
+    return {
+      id: item.id || `${setObj.id}-${idx+1}`,
+      audioText: item.pinyin,
+      ttsSpeech: stripEndingPunctuation(item.hanzi),
+      question: "¿Qué significa lo que escuchaste?",
+      correct: correctIndex,
+      options,
+      explanation: item.example_hanzi
+        ? `Ejemplo: ${stripEndingPunctuation(item.example_hanzi)} · ${item.example_pinyin} · ${item.example_es}`
+        : (setObj.description || '')
+    };
+  });
+}
+
+const practiceCatalog = [
+  {
+    id: 'builtin-original',
+    title: 'Lote actual incluido',
+    description: 'El conjunto original que ya tenía la página',
+    itemsCount: builtinExercises.length,
+    build: () => builtinExercises
+  },
+  ...lessonPhraseSets.map(setObj => ({
+    id: setObj.id,
+    title: setObj.title,
+    description: setObj.description,
+    itemsCount: setObj.items.length,
+    build: () => buildExercisesFromPhraseSet(setObj)
+  }))
+];
+
+function renderPracticeSelector(){
+  const select = $('practiceSet');
+  const meta = $('practiceSetMeta');
+  if(!select) return;
+  select.innerHTML = practiceCatalog.map(set => `<option value="${set.id}">${set.title}</option>`).join('');
+  const updateMeta = () => {
+    const selected = practiceCatalog.find(set => set.id === select.value) || practiceCatalog[0];
+    meta.innerHTML = `<strong style="color:var(--ink)">${selected.itemsCount} frases</strong><br>${selected.description}`;
+  };
+  select.addEventListener('change', updateMeta);
+  updateMeta();
+}
+
+function startSelectedPractice(){
+  const setId = $('practiceSet').value;
+  const selectedMode = $('startMode').value;
+  const selected = practiceCatalog.find(set => set.id === setId) || practiceCatalog[0];
+  mode = selectedMode;
+  document.querySelectorAll('.mode-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.mode === mode);
+  });
+  startSession(selected.build());
+}
+
+// ─── STATE ─────────────────────────────────────────────────────────────────
+let exercises = [];
+let shuffled = [];
+let current = 0;
+let correct = 0;
+let wrong = 0;
+let answered = false;
+let playCount = 0;
+let mode = 'options'; // 'options' | 'type' | 'pinyin'
+let uploadedAudios = {}; // filename -> objectURL
+let waveInterval = null;
+let synth = window.speechSynthesis;
+let utterance = null;
+
+// ─── UI HELPERS ────────────────────────────────────────────────────────────
+function $(id){ return document.getElementById(id); }
+
+function buildWaveform(){
+  const wf = $('waveform');
+  wf.innerHTML='';
+  const heights = [6,10,14,18,14,22,16,12,20,16,10,14,18,12,8,16,20,14,10,16];
+  heights.forEach((h,i)=>{
+    const b = document.createElement('div');
+    b.className='wave-bar';
+    b.style.height = h+'px';
+    b.id = 'wb'+i;
+    wf.appendChild(b);
+  });
+}
+
+function animateWave(on){
+  clearInterval(waveInterval);
+  if(!on){
+    document.querySelectorAll('.wave-bar').forEach(b=>b.classList.remove('active'));
+    return;
+  }
+  waveInterval = setInterval(()=>{
+    const bars = document.querySelectorAll('.wave-bar');
+    bars.forEach((b,i)=>{
+      if(Math.random()>0.5) b.classList.toggle('active');
+    });
+  }, 120);
+}
+
+function updateProgress(){
+  const total = shuffled.length;
+  const done = current;
+  const pct = total ? Math.round(done/total*100) : 0;
+  $('progressFill').style.width = pct+'%';
+  $('progressLabel').textContent = done+' / '+total;
+  $('scoreCorrect').textContent = correct;
+  $('scoreWrong').textContent = wrong;
+  $('scoreRemain').textContent = total - done;
+}
+
+// ─── AUDIO ─────────────────────────────────────────────────────────────────
+function playAudio(){
+  const ex = shuffled[current];
+  playCount++;
+  $('playCount').textContent = 'Reproducción '+playCount;
+  $('playBtn').classList.add('playing');
+
+  // If we have an uploaded audio file
+  if(ex.audioFile && uploadedAudios[ex.audioFile]){
+    const audio = new Audio(uploadedAudios[ex.audioFile]);
+    animateWave(true);
+    audio.play();
+    audio.onended = ()=>{ animateWave(false); $('playBtn').classList.remove('playing'); };
+    return;
+  }
+
+  // Fallback: Web Speech API TTS
+  if(!synth) return;
+  if(utterance) synth.cancel();
+  utterance = new SpeechSynthesisUtterance(ex.ttsSpeech || ex.audioText);
+  utterance.lang = 'zh-CN';
+  utterance.rate = 0.85;
+
+  // Try to pick a Chinese voice
+  const voices = synth.getVoices();
+  const zhVoice = voices.find(v=>v.lang.startsWith('zh'));
+  if(zhVoice) utterance.voice = zhVoice;
+
+  animateWave(true);
+  utterance.onend = ()=>{ animateWave(false); $('playBtn').classList.remove('playing'); };
+  synth.speak(utterance);
+}
+
+// ─── MODE ──────────────────────────────────────────────────────────────────
+document.querySelectorAll('.mode-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.mode-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    mode = btn.dataset.mode;
+    if($('startMode')) $('startMode').value = mode;
+  });
+});
+
+// ─── RENDER QUESTION ───────────────────────────────────────────────────────
+function renderQuestion(){
+  if(current >= shuffled.length){ showFinal(); return; }
+  answered = false;
+  playCount = 0;
+
+  const ex = shuffled[current];
+  $('cardNumber').textContent = String(current+1).padStart(2,'0');
+  $('audioTitle').textContent = ex.audioFile || 'Audio ' + (current+1);
+  $('playCount').textContent = 'Toca ▶ para escuchar';
+  $('feedback').style.display='none';
+  $('nextBtn').classList.remove('visible');
+  $('showAnswerBtn').classList.remove('visible');
+  buildWaveform();
+
+  // Render options or input
+  const optZone = $('optionsZone');
+  const txtZone = $('textInputZone');
+  optZone.innerHTML='';
+
+  if(mode==='options'){
+    optZone.style.display='grid';
+    txtZone.classList.remove('visible');
+    const letters = ['A','B','C','D'];
+    ex.options.forEach((opt,i)=>{
+      const btn = document.createElement('button');
+      btn.className='option-btn';
+      btn.innerHTML=`
+        <div class="opt-letter">${letters[i]}</div>
+        <div class="opt-text">
+          <span class="opt-zh">${opt.zh}</span>
+          <span class="opt-py">${opt.py}</span>
+          <span class="opt-es">${opt.es}</span>
+        </div>`;
+      btn.onclick=()=>selectOption(i, btn, ex);
+      optZone.appendChild(btn);
+    });
+    $('showAnswerBtn').classList.add('visible');
+  } else {
+    optZone.style.display='none';
+    txtZone.classList.add('visible');
+    $('textInput').value='';
+    $('textInput').focus();
+    if(mode==='pinyin'){
+      $('textInput').placeholder='Escribí en pinyin (nǐ hǎo, ni hao...)';
+    } else {
+      $('textInput').placeholder='Escribí en caracteres (你好) o pinyin (nǐ hǎo)...';
+    }
+    $('showAnswerBtn').classList.add('visible');
+  }
+  updateProgress();
+
+  // Animate card
+  $('theCard').style.animation='none';
+  void $('theCard').offsetWidth;
+  $('theCard').style.animation='slideIn 0.35s ease';
+}
+
+// ─── SELECT OPTION ─────────────────────────────────────────────────────────
+function selectOption(i, btn, ex){
+  if(answered) return;
+  answered = true;
+  animateWave(false);
+  $('playBtn').classList.remove('playing');
+  if(synth) synth.cancel();
+
+  const isCorrect = i === ex.correct;
+  if(isCorrect) correct++; else wrong++;
+
+  // Mark buttons
+  document.querySelectorAll('.option-btn').forEach((b,j)=>{
+    b.disabled=true;
+    if(j===ex.correct) b.classList.add('correct');
+    else if(j===i && !isCorrect) b.classList.add('wrong');
+  });
+
+  showFeedback(isCorrect, ex);
+  $('nextBtn').classList.add('visible');
+  $('showAnswerBtn').classList.remove('visible');
+  updateProgress();
+}
+
+// ─── CHECK TEXT ANSWER ─────────────────────────────────────────────────────
+function checkTextAnswer(){
+  if(answered) return;
+  const ex = shuffled[current];
+  const val = $('textInput').value.trim().toLowerCase();
+  if(!val){ $('textInput').focus(); return; }
+
+  answered = true;
+  const correctOpt = ex.options[ex.correct];
+
+  // Check against zh, py (with/without tones, spaces), es
+  const normalize = s => s.toLowerCase().replace(/[āáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ]/g, c=>'aeiouuuu'[' āáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ'.indexOf(c)%8]||c).replace(/\s+/g,'').replace(/[^a-z0-9\u4e00-\u9fff]/g,'');
+  const nVal = normalize(val);
+  const targets = [correctOpt.zh, correctOpt.py, correctOpt.es].map(normalize);
+  // Also accept pinyin without tone marks
+  const pyNoTone = correctOpt.py.replace(/[āáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ]/g, c=>{
+    const m = {ā:'a',á:'a',ǎ:'a',à:'a',ē:'e',é:'e',ě:'e',è:'e',ī:'i',í:'i',ǐ:'i',ì:'i',ō:'o',ó:'o',ǒ:'o',ò:'o',ū:'u',ú:'u',ǔ:'u',ù:'u',ǖ:'v',ǘ:'v',ǚ:'v',ǜ:'v'};
+    return m[c]||c;
+  }).replace(/\s+/g,'');
+  targets.push(pyNoTone);
+
+  const isCorrect = targets.some(t=>t===nVal || nVal.includes(t) || t.includes(nVal));
+  if(isCorrect) correct++; else wrong++;
+
+  $('textInput').style.borderColor = isCorrect ? 'var(--correct)' : 'var(--wrong)';
+  showFeedback(isCorrect, ex);
+  $('nextBtn').classList.add('visible');
+  $('showAnswerBtn').classList.remove('visible');
+  updateProgress();
+}
+
+// ─── FEEDBACK ──────────────────────────────────────────────────────────────
+function showFeedback(isCorrect, ex){
+  const fb = $('feedback');
+  const correctOpt = ex.options[ex.correct];
+  fb.className = 'feedback' + (isCorrect ? '' : ' wrong');
+  $('feedbackLabel').textContent = isCorrect ? '✓ Correcto · 正确' : '✗ Incorrecto · 错误';
+  $('feedbackContent').textContent = correctOpt.zh + ' — ' + correctOpt.es;
+  $('feedbackPy').textContent = correctOpt.py;
+  $('feedbackExpl').textContent = ex.explanation || '';
+  fb.style.display='block';
+}
+
+// ─── SHOW ANSWER ───────────────────────────────────────────────────────────
+function showAnswer(){
+  const ex = shuffled[current];
+  answered = true;
+  wrong++;
+
+  document.querySelectorAll('.option-btn').forEach((b,j)=>{
+    b.disabled=true;
+    if(j===ex.correct) b.classList.add('correct');
+  });
+  showFeedback(false, ex);
+  $('nextBtn').classList.add('visible');
+  $('showAnswerBtn').classList.remove('visible');
+  updateProgress();
+}
+
+// ─── NEXT ──────────────────────────────────────────────────────────────────
+function nextQuestion(){
+  current++;
+  $('textInput') && ($('textInput').style.borderColor='');
+  renderQuestion();
+}
+
+// ─── FINAL ─────────────────────────────────────────────────────────────────
+function showFinal(){
+  $('questionCard').style.display='none';
+  $('progressArea').style.display='none';
+  $('modeRow').style.display='none';
+  const total = correct+wrong;
+  const pct = total ? Math.round(correct/total*100) : 0;
+  $('finalPct').textContent = pct+'%';
+  $('finalCorrect').textContent = correct;
+  $('finalWrong').textContent = wrong;
+  $('finalScreen').style.display='block';
+}
+
+function restart(){
+  correct=0; wrong=0; current=0;
+  shuffled = shuffle([...exercises]);
+  $('finalScreen').style.display='none';
+  $('progressArea').style.display='block';
+  $('modeRow').style.display='flex';
+  $('questionCard').style.display='block';
+  renderQuestion();
+}
+
+function shuffle(arr){
+  for(let i=arr.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]]=[arr[j],arr[i]];
+  }
+  return arr;
+}
+
+// ─── START ─────────────────────────────────────────────────────────────────
+function startSession(exList){
+  exercises = exList;
+  shuffled = shuffle([...exercises]);
+  current=0; correct=0; wrong=0;
+  $('uploadSection').style.display='none';
+  $('practiceSetup').style.display='none';
+  document.querySelector('.builtin-banner').style.display='none';
+  document.querySelector('.helper').style.display='none';
+  $('progressArea').style.display='block';
+  $('modeRow').style.display='flex';
+  $('questionCard').style.display='block';
+  renderQuestion();
+}
+
+$('startBuiltin').addEventListener('click',()=>{
+  mode = $('startMode') ? $('startMode').value : 'options';
+  document.querySelectorAll('.mode-btn').forEach(btn=>btn.classList.toggle('active', btn.dataset.mode===mode));
+  startSession(builtinExercises);
+});
+$('startSelectedBuiltin').addEventListener('click', startSelectedPractice);
+
+// ─── UPLOADS ───────────────────────────────────────────────────────────────
+let uploadedAudioFiles = [];
+let uploadedJson = null;
+
+$('audioUpload').addEventListener('change', function(e){
+  Array.from(e.target.files).forEach(f=>{
+    if(!uploadedAudioFiles.find(x=>x.name===f.name)){
+      uploadedAudioFiles.push(f);
+      uploadedAudios[f.name] = URL.createObjectURL(f);
+    }
+  });
+  renderFileList();
+  checkStartReady();
+});
+
+$('jsonUpload').addEventListener('change', function(e){
+  const f = e.target.files[0];
+  if(!f) return;
+  const reader = new FileReader();
+  reader.onload = ev=>{
+    try {
+      uploadedJson = JSON.parse(ev.target.result);
+      renderFileList();
+      checkStartReady();
+    } catch(err){
+      alert('Error al leer el JSON: '+err.message);
+    }
+  };
+  reader.readAsText(f);
+});
+
+function renderFileList(){
+  const fl = $('fileList');
+  fl.innerHTML='';
+  uploadedAudioFiles.forEach((f,i)=>{
+    const div = document.createElement('div');
+    div.className='file-item';
+    div.innerHTML=`<span class="file-icon">🎵</span><span class="file-name">${f.name}</span><button class="file-remove" onclick="removeAudio(${i})">✕</button>`;
+    fl.appendChild(div);
+  });
+  if(uploadedJson){
+    const div = document.createElement('div');
+    div.className='file-item';
+    div.innerHTML=`<span class="file-icon">📋</span><span class="file-name">preguntas.json (${uploadedJson.length} ejercicios)</span><button class="file-remove" onclick="removeJson()">✕</button>`;
+    fl.appendChild(div);
+  }
+}
+
+function removeAudio(i){
+  URL.revokeObjectURL(uploadedAudios[uploadedAudioFiles[i].name]);
+  delete uploadedAudios[uploadedAudioFiles[i].name];
+  uploadedAudioFiles.splice(i,1);
+  renderFileList(); checkStartReady();
+}
+function removeJson(){
+  uploadedJson=null;
+  renderFileList(); checkStartReady();
+}
+
+function checkStartReady(){
+  const btn = $('startWithUploads');
+  if(uploadedJson && uploadedJson.length>0){
+    btn.style.display='inline-block';
+  } else {
+    btn.style.display='none';
+  }
+}
+
+$('startWithUploads').addEventListener('click',()=>{
+  if(!uploadedJson) return;
+  mode = $('startMode') ? $('startMode').value : mode;
+  document.querySelectorAll('.mode-btn').forEach(btn=>btn.classList.toggle('active', btn.dataset.mode===mode));
+  startSession(uploadedJson);
+});
+
+// ─── ENTER KEY ─────────────────────────────────────────────────────────────
+document.addEventListener('keydown', e=>{
+  if(e.key==='Enter'){
+    if(answered){ nextQuestion(); }
+    else if(mode!=='options'){ checkTextAnswer(); }
+  }
+  if(e.key===' ' && !e.target.matches('input')){
+    e.preventDefault();
+    playAudio();
+  }
+});
+
+function toggleHelper(){
+  const h = document.querySelector('.helper');
+  h.style.display = h.style.display==='none' ? 'block' : 'none';
+}
+
+renderPracticeSelector();
+if($('startMode')) $('startMode').addEventListener('change', e => { mode = e.target.value; document.querySelectorAll('.mode-btn').forEach(btn=>btn.classList.toggle('active', btn.dataset.mode===mode)); });
+// Preload voices
+if(synth){ synth.getVoices(); synth.onvoiceschanged=()=>synth.getVoices(); }
+</script>
+</body>
+</html>
