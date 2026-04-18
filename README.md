@@ -1,16 +1,24 @@
 # Práctica de chino
 
-Sitio estático de tarjetas de estudio para practicar vocabulario y caracteres chinos, inspirado en una dinámica similar a AnkiWeb.
+Sitio estático para practicar chino mediante **tarjetas de estudio** y **reconocimiento auditivo de frases**, inspirado en una dinámica similar a AnkiWeb.
 
 ## Funcionalidades
 
-- Selección de una o varias lecciones
-- Visualización de tarjetas con hanzi
-- Revelado de pinyin, significado y oración de ejemplo
-- Marcado de tarjetas como:
+- Selección de una o varias lecciones o lotes
+- Elección de tipo de práctica:
+  - **Tarjetas**
+  - **Audios**
+- En modo **Tarjetas**:
+  - visualización de hanzi
+  - revelado de pinyin, significado y oración de ejemplo
+- En modo **Audios**:
+  - reproducción de frases mediante síntesis de voz
+  - reconocimiento auditivo antes de revelar la respuesta
+  - selector visible de velocidad de reproducción
+- Marcado de ítems como:
   - **La sabía**
   - **No la sabía**
-- Lote automático de tarjetas **a repasar**
+- Lote automático de ítems **a repasar**
 - Opción de repasar pendientes al finalizar
 - Reinicio de ronda o de lección
 - Guardado de progreso en `localStorage`
@@ -25,24 +33,22 @@ No requiere backend ni base de datos.
 
 ## Estructura
 
-Los datos de las tarjetas están embebidos dentro del mismo `index.html`, en un objeto `APP_DATA`, agrupado por lección.
+Los datos están embebidos dentro del mismo `index.html`, en un objeto `APP_DATA`.
 
-Cada lección tiene esta estructura:
+Actualmente hay dos tipos principales de lotes:
+
+- `lessons`: tarjetas de vocabulario / caracteres
+- lotes de frases (`leccion-4-frases` en adelante): usados para práctica de audio
+
+### Ejemplo de tarjeta
 
 ```js
 {
-  id: "leccion-1",
-  title: "Lección 1",
-  description: "Descripción",
-  items: [
-    {
-      id: "l1-001",
-      hanzi: "你",
-      pinyin: "nǐ",
-      meaning: "tú",
-      example_hanzi: "你好。",
-      example_pinyin: "Nǐ hǎo.",
-      example_es: "Hola."
-    }
-  ]
+  id: "l1-001",
+  hanzi: "你",
+  pinyin: "nǐ",
+  meaning: "tú",
+  example_hanzi: "你好。",
+  example_pinyin: "Nǐ hǎo.",
+  example_es: "Hola."
 }
