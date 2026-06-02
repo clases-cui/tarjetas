@@ -346,6 +346,33 @@
       background: #f8fbff;
     }
 
+    .example-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .speak-example-btn {
+      background: transparent;
+      border: 1px solid #d8e2f0;
+      border-radius: 10px;
+      padding: 6px 8px;
+      font-size: 0.95rem;
+      line-height: 1;
+      color: var(--muted);
+      min-width: 40px;
+    }
+
+    .speak-example-btn:hover {
+      background: #f8fbff;
+    }
+
+    .speak-example-btn.playing {
+      background: #eef4ff;
+      border-color: #8db5ff;
+      color: var(--primary);
+    }
+
     
 
     .controls {
@@ -498,7 +525,10 @@
           <div class="detail-item">
             <div class="detail-header">
               <div class="detail-label" style="margin-bottom: 0;">Oración de ejemplo</div>
-              <button id="btn-toggle-example-translation" class="toggle-translation-btn" type="button" aria-label="Mostrar u ocultar traducción de la oración" title="Mostrar u ocultar traducción de la oración">🙈</button>
+              <div class="example-actions">
+                <button id="btn-speak-example" class="speak-example-btn" type="button" aria-label="Escuchar oración de ejemplo" title="Escuchar oración de ejemplo">🔊</button>
+                <button id="btn-toggle-example-translation" class="toggle-translation-btn" type="button" aria-label="Mostrar u ocultar traducción de la oración" title="Mostrar u ocultar traducción de la oración">🙈</button>
+              </div>
             </div>
             <div class="detail-value">
               <div id="detail-example-hanzi" class="detail-value-hanzi"></div>
@@ -4828,12 +4858,244 @@
     {"id":"top2-017","hanzi":"下","pinyin":"xià","meaning":"abajo; próximo","example_hanzi":"下个月我去中国。","example_pinyin":"Xià ge yuè wǒ qù Zhōngguó.","example_es":"El mes que viene voy a China."},
     {"id":"top2-018","hanzi":"自","pinyin":"zì","meaning":"desde; uno mismo","example_hanzi":"我来自阿根廷。","example_pinyin":"Wǒ lái zì Āgēntíng.","example_es":"Vengo de Argentina."},
     {"id":"top2-019","hanzi":"之","pinyin":"zhī","meaning":"de; ello; usado en palabras como antes/después","example_hanzi":"上课之前，我喝咖啡。","example_pinyin":"Shàngkè zhīqián, wǒ hē kāfēi.","example_es":"Antes de clase tomo café."},
-    {"id":"top2-020","hanzi":"年","pinyin":"nián","meaning":"año","example_hanzi":"今年我学习汉语。","example_pinyin":"Jīnnián wǒ xuéxí Hànyǔ.","example_es":"Este año estudio chino."},
+    {"id":"top2-020","hanzi":"年","pinyin":"nián","meaning":"año","exam,ple_hanzi":"今年我学习汉语。","example_pinyin":"Jīnnián wǒ xuéxí Hànyǔ.","example_es":"Este año estudio chino."},
     {"id":"top2-021","hanzi":"过","pinyin":"guò","meaning":"pasar; haber tenido una experiencia","example_hanzi":"我去过北京。","example_pinyin":"Wǒ qù guò Běijīng.","example_es":"He ido a Pekín."},
     {"id":"top2-022","hanzi":"发","pinyin":"fā","meaning":"enviar; emitir","example_hanzi":"我发短信。","example_pinyin":"Wǒ fā duǎnxìn.","example_es":"Envío un mensaje de texto."},
     {"id":"top2-023","hanzi":"后","pinyin":"hòu","meaning":"después; detrás","example_hanzi":"下课后，我回家。","example_pinyin":"Xiàkè hòu, wǒ huí jiā.","example_es":"Después de clase vuelvo a casa."},
     {"id":"top2-024","hanzi":"作","pinyin":"zuò","meaning":"hacer, realizar; componer","example_hanzi":"我工作。","example_pinyin":"Wǒ gōngzuò.","example_es":"Trabajo."},
     {"id":"top2-025","hanzi":"里","pinyin":"lǐ","meaning":"dentro; en","example_hanzi":"书在包里。","example_pinyin":"Shū zài bāo lǐ.","example_es":"El libro está dentro del bolso."}
+  ]
+},
+{
+  "id": "leccion-viaje",
+  "title": "Lección Viaje a China",
+  "description": "Palabras y frases esenciales para aeropuerto, hotel, universidad, transporte y compras",
+  "items": [
+    {
+      "id": "viaje-001",
+      "hanzi": "护照",
+      "pinyin": "hùzhào",
+      "meaning": "pasaporte",
+      "example_hanzi": "这是我的护照。",
+      "example_pinyin": "Zhè shì wǒ de hùzhào.",
+      "example_es": "Este es mi pasaporte."
+    },
+    {
+      "id": "viaje-002",
+      "hanzi": "酒店",
+      "pinyin": "jiǔdiàn",
+      "meaning": "hotel",
+      "example_hanzi": "我的酒店在哪里？",
+      "example_pinyin": "Wǒ de jiǔdiàn zài nǎli?",
+      "example_es": "¿Dónde está mi hotel?"
+    },
+    {
+      "id": "viaje-003",
+      "hanzi": "大学",
+      "pinyin": "dàxué",
+      "meaning": "universidad",
+      "example_hanzi": "我去大学。",
+      "example_pinyin": "Wǒ qù dàxué.",
+      "example_es": "Voy a la universidad."
+    },
+    {
+      "id": "viaje-004",
+      "hanzi": "北京大学",
+      "pinyin": "Běijīng Dàxué",
+      "meaning": "Universidad de Pekín",
+      "example_hanzi": "我是北京大学的学生。",
+      "example_pinyin": "Wǒ shì Běijīng Dàxué de xuésheng.",
+      "example_es": "Soy estudiante de la Universidad de Pekín."
+    },
+    {
+      "id": "viaje-005",
+      "hanzi": "地铁",
+      "pinyin": "dìtiě",
+      "meaning": "metro",
+      "example_hanzi": "地铁站在哪儿？",
+      "example_pinyin": "Dìtiě zhàn zài nǎr?",
+      "example_es": "¿Dónde está la estación de metro?"
+    },
+    {
+      "id": "viaje-006",
+      "hanzi": "地铁站",
+      "pinyin": "dìtiě zhàn",
+      "meaning": "estación de metro",
+      "example_hanzi": "最近的地铁站在哪儿？",
+      "example_pinyin": "Zuìjìn de dìtiě zhàn zài nǎr?",
+      "example_es": "¿Dónde está la estación de metro más cercana?"
+    },
+    {
+      "id": "viaje-007",
+      "hanzi": "买",
+      "pinyin": "mǎi",
+      "meaning": "comprar",
+      "example_hanzi": "我想买这个。",
+      "example_pinyin": "Wǒ xiǎng mǎi zhège.",
+      "example_es": "Quiero comprar esto."
+    },
+    {
+      "id": "viaje-008",
+      "hanzi": "多少钱？",
+      "pinyin": "Duōshao qián?",
+      "meaning": "¿cuánto cuesta?",
+      "example_hanzi": "这个多少钱？",
+      "example_pinyin": "Zhège duōshao qián?",
+      "example_es": "¿Cuánto cuesta esto?"
+    },
+    {
+      "id": "viaje-009",
+      "hanzi": "机场",
+      "pinyin": "jīchǎng",
+      "meaning": "aeropuerto",
+      "example_hanzi": "我去机场。",
+      "example_pinyin": "Wǒ qù jīchǎng.",
+      "example_es": "Voy al aeropuerto."
+    },
+    {
+      "id": "viaje-010",
+      "hanzi": "出租车",
+      "pinyin": "chūzūchē",
+      "meaning": "taxi",
+      "example_hanzi": "我要出租车。",
+      "example_pinyin": "Wǒ yào chūzūchē.",
+      "example_es": "Quiero un taxi."
+    },
+    {
+      "id": "viaje-011",
+      "hanzi": "火车站",
+      "pinyin": "huǒchē zhàn",
+      "meaning": "estación de tren",
+      "example_hanzi": "火车站在哪儿？",
+      "example_pinyin": "Huǒchē zhàn zài nǎr?",
+      "example_es": "¿Dónde está la estación de tren?"
+    },
+    {
+      "id": "viaje-012",
+      "hanzi": "房间",
+      "pinyin": "fángjiān",
+      "meaning": "habitación",
+      "example_hanzi": "这是我的房间。",
+      "example_pinyin": "Zhè shì wǒ de fángjiān.",
+      "example_es": "Esta es mi habitación."
+    },
+    {
+      "id": "viaje-013",
+      "hanzi": "入住",
+      "pinyin": "rùzhù",
+      "meaning": "hacer check-in",
+      "example_hanzi": "我要办理入住。",
+      "example_pinyin": "Wǒ yào bànlǐ rùzhù.",
+      "example_es": "Quiero hacer el check-in."
+    },
+    {
+      "id": "viaje-014",
+      "hanzi": "学生",
+      "pinyin": "xuésheng",
+      "meaning": "estudiante",
+      "example_hanzi": "我是学生。",
+      "example_pinyin": "Wǒ shì xuésheng.",
+      "example_es": "Soy estudiante."
+    },
+    {
+      "id": "viaje-015",
+      "hanzi": "老师",
+      "pinyin": "lǎoshī",
+      "meaning": "profesor",
+      "example_hanzi": "老师您好。",
+      "example_pinyin": "Lǎoshī nín hǎo.",
+      "example_es": "Hola, profesor."
+    },
+    {
+      "id": "viaje-016",
+      "hanzi": "厕所",
+      "pinyin": "cèsuǒ",
+      "meaning": "baño",
+      "example_hanzi": "厕所在哪儿？",
+      "example_pinyin": "Cèsuǒ zài nǎr?",
+      "example_es": "¿Dónde está el baño?"
+    },
+    {
+      "id": "viaje-017",
+      "hanzi": "水",
+      "pinyin": "shuǐ",
+      "meaning": "agua",
+      "example_hanzi": "我要一瓶水。",
+      "example_pinyin": "Wǒ yào yì píng shuǐ.",
+      "example_es": "Quiero una botella de agua."
+    },
+    {
+      "id": "viaje-018",
+      "hanzi": "饭店",
+      "pinyin": "fàndiàn",
+      "meaning": "restaurante",
+      "example_hanzi": "附近有饭店吗？",
+      "example_pinyin": "Fùjìn yǒu fàndiàn ma?",
+      "example_es": "¿Hay un restaurante cerca?"
+    },
+    {
+      "id": "viaje-019",
+      "hanzi": "菜单",
+      "pinyin": "càidān",
+      "meaning": "menú",
+      "example_hanzi": "请给我菜单。",
+      "example_pinyin": "Qǐng gěi wǒ càidān.",
+      "example_es": "Por favor, deme el menú."
+    },
+    {
+      "id": "viaje-020",
+      "hanzi": "支付宝",
+      "pinyin": "Zhīfùbǎo",
+      "meaning": "Alipay",
+      "example_hanzi": "我用支付宝付款。",
+      "example_pinyin": "Wǒ yòng Zhīfùbǎo fùkuǎn.",
+      "example_es": "Pago con Alipay."
+    },
+    {
+      "id": "viaje-021",
+      "hanzi": "付款",
+      "pinyin": "fùkuǎn",
+      "meaning": "pagar",
+      "example_hanzi": "怎么付款？",
+      "example_pinyin": "Zěnme fùkuǎn?",
+      "example_es": "¿Cómo se paga?"
+    },
+    {
+      "id": "viaje-022",
+      "hanzi": "我听不懂。",
+      "pinyin": "Wǒ tīng bu dǒng.",
+      "meaning": "No entiendo lo que escucho.",
+      "example_hanzi": "对不起，我听不懂。",
+      "example_pinyin": "Duìbuqǐ, wǒ tīng bu dǒng.",
+      "example_es": "Perdón, no entiendo."
+    },
+    {
+      "id": "viaje-023",
+      "hanzi": "请说慢一点。",
+      "pinyin": "Qǐng shuō màn yìdiǎn.",
+      "meaning": "Por favor, hable más despacio.",
+      "example_hanzi": "请说慢一点。",
+      "example_pinyin": "Qǐng shuō màn yìdiǎn.",
+      "example_es": "Por favor, hable más despacio."
+    },
+    {
+      "id": "viaje-024",
+      "hanzi": "我会一点中文。",
+      "pinyin": "Wǒ huì yìdiǎn Zhōngwén.",
+      "meaning": "Sé un poco de chino.",
+      "example_hanzi": "我会一点中文。",
+      "example_pinyin": "Wǒ huì yìdiǎn Zhōngwén.",
+      "example_es": "Sé un poco de chino."
+    },
+    {
+      "id": "viaje-025",
+      "hanzi": "请帮帮我。",
+      "pinyin": "Qǐng bāngbang wǒ.",
+      "meaning": "Por favor, ayúdeme.",
+      "example_hanzi": "请帮帮我。",
+      "example_pinyin": "Qǐng bāngbang wǒ.",
+      "example_es": "Por favor, ayúdeme."
+    }
   ]
 }
 ]
@@ -5018,6 +5280,7 @@
       }
       state.audioUtterance = null;
       $("btn-play-audio")?.classList.remove("playing");
+      $("btn-speak-example")?.classList.remove("playing");
     }
 
     function playCurrentAudio() {
@@ -5040,6 +5303,33 @@
       state.audioUtterance = utterance;
       synth.speak(utterance);
       saveState();
+    }
+
+    function speakExampleAudio() {
+      if (!state.currentCard || !state.currentCard.example_hanzi) return;
+
+      const synth = window.speechSynthesis;
+      if (!synth) {
+        alert("Este navegador no permite reproducir voz automáticamente.");
+        return;
+      }
+
+      stopAudioPlayback();
+
+      const utterance = new SpeechSynthesisUtterance(state.currentCard.example_hanzi);
+      utterance.lang = "zh-CN";
+      utterance.rate = state.audioSpeed || 0.9;
+
+      const voices = synth.getVoices();
+      const zhVoice = voices.find((voice) => voice.lang && voice.lang.toLowerCase().startsWith("zh"));
+      if (zhVoice) utterance.voice = zhVoice;
+
+      utterance.onstart = () => $("btn-speak-example")?.classList.add("playing");
+      utterance.onend = () => $("btn-speak-example")?.classList.remove("playing");
+      utterance.onerror = () => $("btn-speak-example")?.classList.remove("playing");
+
+      state.audioUtterance = utterance;
+      synth.speak(utterance);
     }
 
     function updateExampleTranslationVisibility() {
@@ -5238,6 +5528,11 @@
       });
 
       $("btn-show").addEventListener("click", revealAnswer);
+
+      $("btn-speak-example").addEventListener("click", (event) => {
+        event.stopPropagation();
+        speakExampleAudio();
+      });
 
       $("btn-toggle-example-translation").addEventListener("click", (event) => {
         event.stopPropagation();
