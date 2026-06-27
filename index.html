@@ -1515,7 +1515,7 @@
 
       const utterance = new SpeechSynthesisUtterance(state.currentCard.hanzi);
       utterance.lang = "zh-CN";
-      utterance.rate = state.audioSpeed || 1;
+      utterance.rate = state.audioSpeed || 0.5;
       const voices = synth.getVoices();
       const zhVoice = voices.find((voice) => voice.lang && voice.lang.toLowerCase().startsWith("zh"));
       if (zhVoice) utterance.voice = zhVoice;
