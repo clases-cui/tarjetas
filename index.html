@@ -272,6 +272,15 @@
       color: var(--muted);
     }
 
+.hanzi-front-example-pinyin {
+  display: block;
+  margin-top: 12px;
+  font-size: clamp(1rem, 3vw, 1.35rem);
+  line-height: 1.4;
+  font-weight: 400;
+  color: var(--muted);
+}
+
     .tap-hint {
       color: var(--muted);
       font-size: 0.98rem;
@@ -5441,23 +5450,43 @@
       saveState();
     }
 
-    function updateExampleTranslationVisibility() {
-      const pinyinEl = $("detail-example-pinyin");
-      const esEl = $("detail-example-es");
-      const btn = $("btn-toggle-example-translation");
-      const hidden = !state.exampleTranslationVisible;
+function updateExampleTranslationVisibility() {
+  const pinyinEl = $("detail-example-pinyin");
+  const esEl = $("detail-example-es");
+  const btn = $("btn-toggle-example-translation");
 
-      pinyinEl.classList.toggle("hidden-text", hidden);
-      esEl.classList.toggle("hidden-text", hidden);
-      btn.textContent = hidden ? "🙈" : "👁";
-      btn.setAttribute("aria-pressed", String(!hidden));
-      btn.setAttribute(
-        "title",
-        hidden
-          ? "Mostrar traducción de la oración"
-          : "Ocultar traducción de la oración"
-      );
-    }
+  const hidden = !state.exampleTranslationVisible;
+
+  const isHSK3650 =
+    state.currentCard &&
+    state.currentCard.id &&
+    state.currentCard.id.startsWith("hsk3650-");
+
+  if (isHSK3650) {
+    // En HSK2 el pinyin de la oración siempre se muestra
+    // una vez revelada la tarjeta.
+    pinyinEl.classList.remove("hidden-text");
+
+    // Solamente ocultamos/mostramos la traducción española.
+    esEl.classList.toggle("hidden-text", hidden);
+  } else {
+    // Comportamiento original para las demás lecciones.
+    pinyinEl.classList.toggle("hidden-text", hidden);
+    esEl.classList.toggle("hidden-text", hidden);
+  }
+
+  // El ojo indica que se puede mostrar la traducción.
+  btn.textContent = hidden ? "👁" : "🙈";
+
+  btn.setAttribute("aria-pressed", String(!hidden));
+
+  btn.setAttribute(
+    "title",
+    hidden
+      ? "Mostrar traducción de la oración"
+      : "Ocultar traducción de la oración"
+  );
+}
 
     function renderCurrentCard() {
       if (!state.currentCard) {
@@ -5471,20 +5500,14 @@
       // En el lote HSK 2 (ejercicios 36-50), mostrar también el pinyin
       // en el frente de la tarjeta, sin modificar los datos ni el audio.
       if (state.currentCard.id && state.currentCard.id.startsWith("hsk3650-")) {
-        // Pinyin de la palabra principal
-        const pinyinFront = document.createElement("span");
-        pinyinFront.className = "hanzi-front-pinyin";
-        pinyinFront.textContent = state.currentCard.pinyin;
-        hanziFront.appendChild(pinyinFront);
 
-        // Pinyin de la frase secundaria / ejemplo
-        if (state.currentCard.example_pinyin) {
-        const examplePinyinFront = document.createElement("span");
-        examplePinyinFront.className = "hanzi-front-example-pinyin";
-        examplePinyinFront.textContent = state.currentCard.example_pinyin;
-        hanziFront.appendChild(examplePinyinFront);
-        }
-      }
+  const pinyinFront = document.createElement("span");
+  pinyinFront.className = "hanzi-front-pinyin";
+  pinyinFront.textContent = state.currentCard.pinyin;
+  hanziFront.appendChild(pinyinFront);
+
+}
+
       $("card-visual-zone").classList.toggle("hidden", state.practiceType === "audio");
       $("detail-answer-hanzi").textContent = state.currentCard.hanzi;
       $("detail-answer-hanzi-wrap").classList.toggle("hidden",state.practiceType !== "audio" || !state.revealed);
@@ -5497,7 +5520,7 @@
       $("detail-example-hanzi").textContent = state.currentCard.example_hanzi;
       $("detail-example-pinyin").textContent = state.currentCard.example_pinyin;
       $("detail-example-es").textContent = state.currentCard.example_es;
-      updateExampleTranslationVisibility();
+updateExampleTranslationVisibility();
 
       $("details").classList.toggle("hidden", !state.revealed);
       $("controls-hidden").classList.toggle("hidden", state.revealed);
