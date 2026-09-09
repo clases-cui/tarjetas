@@ -5471,10 +5471,19 @@
       // En el lote HSK 2 (ejercicios 36-50), mostrar también el pinyin
       // en el frente de la tarjeta, sin modificar los datos ni el audio.
       if (state.currentCard.id && state.currentCard.id.startsWith("hsk3650-")) {
+        // Pinyin de la palabra principal
         const pinyinFront = document.createElement("span");
         pinyinFront.className = "hanzi-front-pinyin";
         pinyinFront.textContent = state.currentCard.pinyin;
         hanziFront.appendChild(pinyinFront);
+
+        // Pinyin de la frase secundaria / ejemplo
+        if (state.currentCard.example_pinyin) {
+        const examplePinyinFront = document.createElement("span");
+        examplePinyinFront.className = "hanzi-front-example-pinyin";
+        examplePinyinFront.textContent = state.currentCard.example_pinyin;
+        hanziFront.appendChild(examplePinyinFront);
+        }
       }
       $("card-visual-zone").classList.toggle("hidden", state.practiceType === "audio");
       $("detail-answer-hanzi").textContent = state.currentCard.hanzi;
